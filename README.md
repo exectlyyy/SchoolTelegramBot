@@ -1,2 +1,8 @@
 # SchoolTelegramBot
- ___
+This bot can solve tipycal school tasks.
+
+
+    available:
+        -thermodynamics
+
+        

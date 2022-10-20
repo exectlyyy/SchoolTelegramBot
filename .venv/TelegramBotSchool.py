@@ -1,6 +1,7 @@
 from threading import local
 import telebot
 from telebot import types
+from random import *
 
 bot = telebot.TeleBot('5670990101:AAHCY6UcN3pZC43P5FbVulljTAZVrlo4TWA');
 user_data = {}			#creating a dictionary with all user inputs to correct working
@@ -10,10 +11,16 @@ user_data = {}			#creating a dictionary with all user inputs to correct working
 def greetings(message):
     bot.send_message(message.from_user.id, f'Привет, {message.from_user.first_name}, этот бот поможет тебе в решении задач по таким предметам как физика.')
 
+#cat function
+@bot.message_handler(commands=['cat'])
+def cat(message):
+	list_cats = ['https://ferma-biz.ru/wp-content/uploads/2022/08/QPdAc.jpg', 'https://ferma-biz.ru/wp-content/uploads/2022/08/koty-50.jpg', 'https://fydi.ru/wp-content/uploads/2021/08/koty-i-koshki-93.jpg']
+	bot.send_photo(message.from_user.id, photo = choice(list_cats))
+
 #help function
 @bot.message_handler(commands=['help'])
 def help(message):
-    bot.send_message(message.from_user.id, 'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.')
+	bot.send_message(message.from_user.id, 'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)')
 
 #clear function
 @bot.message_handler(commands=['clear'])
@@ -31,7 +38,7 @@ def main(message):
 		user_data[message.from_user.id] = []
 	local_data = user_data[message.from_user.id]
 	if len(local_data) == 0:			#main branch
-		if message.text.lower() == 'предмет':
+		if message.text.lower() == 'предмет' or message.text.lower() == 'предметы':
 			markup = types.ReplyKeyboardMarkup()    
 			subjbut1 = types.KeyboardButton('Физика') 			
 			markup.add(subjbut1)
