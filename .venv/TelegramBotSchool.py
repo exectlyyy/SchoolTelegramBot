@@ -52,12 +52,16 @@ def main(message):
 		if message.text.lower() == 'термодинамика':
 			markup = types.ReplyKeyboardMarkup()
 			pt1 = types.KeyboardButton('Количество теплоты')
-			markup.add(pt1)
+			pt2 = types.KeyboardButton('Удельная теплоёмкость')
+			markup.add(pt1, pt2)
 			bot.send_message(message.from_user.id, "Выберите неизвестное", reply_markup=markup)
 			local_data.append(message.text.lower())
 		else:
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, выбери нужный тебе раздел:')
-	elif len(local_data) == 3 and message.text.lower() == 'количество теплоты':			#start of thermodynamic(1)
+
+
+
+	elif len(local_data) == 3 and message.text.lower() == 'количество теплоты':																											#start of thermodynamic(1)
 		bot.send_message(message.from_user.id, "Введите удельную теплоёмкость (Дж/кг * °C)")
 		local_data.append(message.text.lower())
 	elif len(local_data) == 4 and local_data[3] == 'количество теплоты':
@@ -81,10 +85,38 @@ def main(message):
 	elif len(local_data) == 7 and local_data[3] == 'количество теплоты':
 		local_data.append(float(message.text.lower()))
 		if int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7]) % 1000 == 0:
-			bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7]) // 1000} КДж.')
+			bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7]) // 1000} кДж. (Для перевода в Дж *1000)')
 		else:
 			bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7])} Дж.')
-		user_data[message.from_user.id] = []				#end of thermodynamic(1)
+		user_data[message.from_user.id] = []																																		#end of thermodynamic(1)
+
+
+
+	elif len(local_data) == 3 and (message.text.lower() == 'удельная теплоемкость' or message.text.lower() == 'удельная теплоёмкость'):																											#start of thermodynamic(2)
+		bot.send_message(message.from_user.id, "Введите количество теплоты (Дж)")
+		local_data.append(message.text.lower())
+	elif len(local_data) == 4 and (local_data[3] == 'удельная теплоемкость' or local_data[3] == 'удельная теплоёмкость'):
+		if int(message.text) > 0:
+			bot.send_message(message.from_user.id, "Введите начальную температуру (°C)")
+			local_data.append(float(message.text.lower()))
+		else:
+			bot.send_message(message.from_user.id, "Введите корректное значение, если нужна помощь - /help")
+	elif len(local_data) == 5 and (local_data[3] == 'удельная теплоемкость' or local_data[3] == 'удельная теплоёмкость'):
+		if int(message.text) >= 0:
+			bot.send_message(message.from_user.id, "Введите конечную  температуру (°C)")
+			local_data.append(float(message.text.lower()))
+		else:
+			bot.send_message(message.from_user.id, "Введите корректное значение, если нужна помощь - /help")
+	elif len(local_data) == 6 and (local_data[3] == 'удельная теплоемкость' or local_data[3] == 'удельная теплоёмкость'):
+		if int(message.text) >= 0:
+			bot.send_message(message.from_user.id, "Введите массу (кг)")
+			local_data.append(float(message.text.lower()))
+		else:
+			bot.send_message(message.from_user.id, "Введите корректное значение, если нужна помощь - /help")
+	elif len(local_data) == 7 and (local_data[3] == 'удельная теплоемкость' or local_data[3] == 'удельная теплоёмкость'):
+		local_data.append(float(message.text.lower()))
+		bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {int(local_data[4]  / (local_data[6] - local_data[5]) * local_data[7])} (Дж/кг * °C).')
+		user_data[message.from_user.id] = []																																		#end of thermodynamic(2)
 
 	print(user_data)
 
