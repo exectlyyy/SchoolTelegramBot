@@ -20,14 +20,17 @@ def cat(message):
 #help function
 @bot.message_handler(commands=['help'])
 def help(message):
-	bot.send_message(message.from_user.id, 'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)')
+	bot.send_message(message.from_user.id, f'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)\n\n   {message.from_user.first_name}, напиши "предметы"')
 
 #clear function
 @bot.message_handler(commands=['clear'])
 def help(message):
 	global user_data
 	user_data[message.from_user.id] = []
-	bot.send_message(message.from_user.id, 'История очищена!')
+	markup = types.ReplyKeyboardMarkup() 
+	clear_markup1 = types.KeyboardButton('Предметы') 
+	markup.add(clear_markup1)
+	bot.send_message(message.from_user.id, 'История очищена!', reply_markup=markup)
 	
 #main function
 @bot.message_handler(content_types=['text'])			
@@ -58,9 +61,11 @@ def main(message):
 	elif len(local_data) == 2:			#chapter branch
 		if message.text.lower() == 'термодинамика':
 			markup = types.ReplyKeyboardMarkup()
-			pt1 = types.KeyboardButton('Количество теплоты')
-			pt2 = types.KeyboardButton('Удельная теплоёмкость')
-			markup.add(pt1, pt2)
+			PhysicsThermodynamics1 = types.KeyboardButton('Количество теплоты')
+			PhysicsThermodynamics2 = types.KeyboardButton('Удельная теплоёмкость')
+			PhysicsThermodynamics3 = types.KeyboardButton('Начальная температура')
+			PhysicsThermodynamics4 = types.KeyboardButton('Конечная температура')
+			markup.add(PhysicsThermodynamics1, PhysicsThermodynamics2, PhysicsThermodynamics3, PhysicsThermodynamics4)
 			bot.send_message(message.from_user.id, "Выберите неизвестное", reply_markup=markup)
 			local_data.append(message.text.lower())
 		else:
@@ -94,7 +99,7 @@ def main(message):
 		if int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7]) % 1000 == 0:
 			bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7]) // 1000} кДж. (Для перевода в Дж *1000)')
 		else:
-			bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7])} Дж.')
+			bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {round(local_data[4] * (local_data[6] - local_data[5]) * local_data[7])} Дж.')
 		user_data[message.from_user.id] = []																																		#end of thermodynamic(1)
 
 
@@ -122,9 +127,66 @@ def main(message):
 			bot.send_message(message.from_user.id, "Введите корректное значение, если нужна помощь - /help")
 	elif len(local_data) == 7 and (local_data[3] == 'удельная теплоемкость' or local_data[3] == 'удельная теплоёмкость'):
 		local_data.append(float(message.text.lower()))
-		bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {int(local_data[4]  / (local_data[6] - local_data[5]) * local_data[7])} (Дж/кг * °C).')
+		bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {round(local_data[4]  / (local_data[6] - local_data[5]) * local_data[7])} (Дж/кг * °C).')
 		user_data[message.from_user.id] = []																																		#end of thermodynamic(2)
+
+
+
+	elif len(local_data) == 3 and message.text.lower() == 'начальная температура':                                                                                                         #start of thermodynamic(3)
+		bot.send_message(message.from_user.id, "Введите количество теплоты (Дж)")
+		local_data.append(message.text.lower())
+	elif len(local_data) == 4 and local_data[3] == 'начальная температура':
+		if int(message.text) > 0:
+			bot.send_message(message.from_user.id, "Введите удельную теплоёмкость (Дж/кг * °C)")
+			local_data.append(float(message.text.lower()))
+		else:
+			bot.send_message(message.from_user.id, "Введите корректное значение, если нужна помощь - /help")
+	elif len(local_data) == 5 and local_data[3] == 'начальная температура':
+		if int(message.text) >= 0:
+			bot.send_message(message.from_user.id, "Введите конечную  температуру (°C)")
+			local_data.append(float(message.text.lower()))
+		else:
+			bot.send_message(message.from_user.id, "Введите корректное значение, если нужна помощь - /help")
+	elif len(local_data) == 6 and local_data[3] == 'начальная температура':
+		if int(message.text) >= 0:
+			bot.send_message(message.from_user.id, "Введите массу (кг)")
+			local_data.append(float(message.text.lower()))
+		else:
+			bot.send_message(message.from_user.id, "Введите корректное значение, если нужна помощь - /help")
+	elif len(local_data) == 7 and local_data[3] == 'начальная температура':
+		local_data.append(float(message.text.lower()))
+		bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {round(local_data[6] - (local_data[4]/(local_data[5] * local_data[6])))} (°C).')
+		user_data[message.from_user.id] = []                                                                                                                                        #end of thermodynamic(3)
+
+
+
+	elif len(local_data) == 3 and message.text.lower() == 'конечная температура':                                                                                                         #start of thermodynamic(4)
+		bot.send_message(message.from_user.id, "Введите количество теплоты (Дж)")
+		local_data.append(message.text.lower())
+	elif len(local_data) == 4 and local_data[3] == 'конечная температура':
+		if int(message.text) > 0:
+			bot.send_message(message.from_user.id, "Введите удельную теплоёмкость (Дж/кг * °C)")
+			local_data.append(float(message.text.lower()))
+		else:
+			bot.send_message(message.from_user.id, "Введите корректное значение, если нужна помощь - /help")
+	elif len(local_data) == 5 and local_data[3] == 'конечная температура':
+		if int(message.text) >= 0:
+			bot.send_message(message.from_user.id, "Введите начальную  температуру (°C)")
+			local_data.append(float(message.text.lower()))
+		else:
+			bot.send_message(message.from_user.id, "Введите корректное значение, если нужна помощь - /help")
+	elif len(local_data) == 6 and local_data[3] == 'конечная температура':
+		if int(message.text) >= 0:
+			bot.send_message(message.from_user.id, "Введите массу (кг)")
+			local_data.append(float(message.text.lower()))
+		else:
+			bot.send_message(message.from_user.id, "Введите корректное значение, если нужна помощь - /help")
+	elif len(local_data) == 7 and local_data[3] == 'конечная температура':
+		local_data.append(float(message.text.lower()))
+		bot.send_message(message.from_user.id, f'Ответом на эту задачу является: {round(local_data[6] + (local_data[4]/(local_data[5] * local_data[7])))} (°C).')
+		user_data[message.from_user.id] = []                                                                                                                                        #end of thermodynamic(4)
+
 
 	print(user_data)
 
-bot.infinity_polling()
+bot.infinity_polling()                                                                                                                               #end of thermodynamic(3)
