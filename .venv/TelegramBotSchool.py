@@ -6,7 +6,8 @@ from random import *
 bot = telebot.TeleBot('5670990101:AAHCY6UcN3pZC43P5FbVulljTAZVrlo4TWA');
 user_data = {}			#creating a dictionary with all user inputs to correct working
 #0 - флаг 1-название 2 - столица 3-дата основания 4-население 5-форма правления 6-глава и пост 7 - официальные языки 8 -  валюта 
-country_data = {'Россия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', 'Российская Федерация', 'Москва', '25.12.1991', '147 млн. человек', 'республика', 'Владимир Владимирович Путин, президент РФ (на 2022)', 'русский', 'российский рубль, ₽']}
+country_data = {'Россия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', 'Российская Федерация', 'Москва', '25.12.1991', '147 млн. человек', 'республика', 'Владимир Владимирович Путин, президент РФ (на 2022)', 'русский', 'российский рубль, ₽ (RUB)'], 
+				'Япония': ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/320px-Flag_of_Japan.svg.png', 'Япония', 'Токио', '11.02.660 до н.э.', '125 млню человек', 'конституционная монархия', 'Нарухито, император\n Фумио Кисида, премьер-министр (на 2022)', 'японский', 'японская иена, ¥ (JPY)']}
 
 #start function
 @bot.message_handler(commands=['start'])
@@ -72,7 +73,7 @@ def main(message):
 	elif len(local_data) == 2 and local_data[0] == 'справочные материалы':
 		if message.text.title() in country_data:
 			local_data.append(message.text.lower())
-			text = f"---{country_data[str(local_data[2].title())][1]}---\n ‣Столица: {country_data[str(local_data[2].title())][2]}\n  ‣Дата основания: {country_data[str(local_data[2].title())][3]}\n ‣Численность населения(млн. чел): {country_data[str(local_data[2].title())][4]}\n ‣Форма правления: {country_data[str(local_data[2].title())][5]}\n ‣Глава государства и должность: {country_data[str(local_data[2].title())][6]}\n ‣Официльный(е) язык(и): {country_data[str(local_data[2].title())][7]}\n ‣Валюта: {country_data[str(local_data[2].title())][8]}\n"
+			text = f"---{country_data[str(local_data[2].title())][1]}---\n ‣Столица: {country_data[str(local_data[2].title())][2]}\n ‣Дата основания: {country_data[str(local_data[2].title())][3]}\n ‣Численность населения: {country_data[str(local_data[2].title())][4]}\n ‣Форма правления: {country_data[str(local_data[2].title())][5]}\n ‣Глава государства и должность: {country_data[str(local_data[2].title())][6]}\n ‣Официльный(е) язык(и): {country_data[str(local_data[2].title())][7]}\n ‣Валюта: {country_data[str(local_data[2].title())][8]}\n"
 			bot.send_photo(message.from_user.id, photo=country_data[local_data[2].title()][0], caption=text)
 			user_data[message.from_user.id] = []    
 		else:
