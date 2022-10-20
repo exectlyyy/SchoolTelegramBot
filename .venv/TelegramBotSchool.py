@@ -14,12 +14,12 @@ def greetings(message):
 #cat function
 @bot.message_handler(commands=['cat'])
 def cat(message):
-	bot.send_photo(message.from_user.id, photo = (f'.venv/img/cat{randint(1, 2)}.jpg', 'rb'))
+	list_cats = ['https://ferma-biz.ru/wp-content/uploads/2022/08/QPdAc.jpg', 'https://ferma-biz.ru/wp-content/uploads/2022/08/koty-50.jpg', 'https://fydi.ru/wp-content/uploads/2021/08/koty-i-koshki-93.jpg']
+	bot.send_photo(message.from_user.id, photo = choice(list_cats))
 
 #help function
 @bot.message_handler(commands=['help'])
 def help(message):
-	
 	bot.send_message(message.from_user.id, 'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)')
 
 #clear function
