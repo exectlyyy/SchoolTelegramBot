@@ -189,4 +189,4 @@ def main(message):
 
 	print(user_data)
 
-bot.infinity_polling()                                                                                                                               #end of thermodynamic(3)
+bot.infinity_polling(timeout=1080)                                                                                                                               #end of thermodynamic(3)
