@@ -1,6 +1,7 @@
 from threading import local
 import telebot
 from telebot import types
+from random import *
 
 bot = telebot.TeleBot('5670990101:AAHCY6UcN3pZC43P5FbVulljTAZVrlo4TWA');
 user_data = {}			#creating a dictionary with all user inputs to correct working
@@ -10,10 +11,16 @@ user_data = {}			#creating a dictionary with all user inputs to correct working
 def greetings(message):
     bot.send_message(message.from_user.id, f'Привет, {message.from_user.first_name}, этот бот поможет тебе в решении задач по таким предметам как физика.')
 
+#cat function
+@bot.message_handler(commands=['cat'])
+def cat(message):
+	bot.send_photo(message.from_user.id, photo = (f'.venv/img/cat{randint(1, 2)}.jpg', 'rb'))
+
 #help function
 @bot.message_handler(commands=['help'])
 def help(message):
-    bot.send_message(message.from_user.id, 'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.')
+	
+	bot.send_message(message.from_user.id, 'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)')
 
 #clear function
 @bot.message_handler(commands=['clear'])
