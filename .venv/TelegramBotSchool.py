@@ -5,6 +5,8 @@ from random import *
 
 bot = telebot.TeleBot('5670990101:AAHCY6UcN3pZC43P5FbVulljTAZVrlo4TWA');
 user_data = {}			#creating a dictionary with all user inputs to correct working
+#0 - флаг 1-название 2 - столица 3-дата основания 4-население 5-форма правления 6-глава и пост 7 - официальные языки 8 -  валюта 
+country_data = {'Россия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', 'Российская Федерация', 'Москва', '25.12.1991', '147 млн. человек', 'республика', 'Владимир Владимирович Путин, президент РФ (на 2022)', 'русский', 'российский рубль, ₽']}
 
 #start function
 @bot.message_handler(commands=['start'])
@@ -20,7 +22,11 @@ def cat(message):
 #help function
 @bot.message_handler(commands=['help'])
 def help(message):
-	bot.send_message(message.from_user.id, f'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)\n\n   {message.from_user.first_name}, напиши "предметы"')
+	markup = types.ReplyKeyboardMarkup() 
+	clear_markup1 = types.KeyboardButton('Решение задач') 
+	clear_markup2 = types.KeyboardButton('Справочные материалы') 
+	markup.add(clear_markup1, clear_markup2)
+	bot.send_message(message.from_user.id, f'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)\n\n   {message.from_user.first_name}, напиши "решение задач" или "справочные материалы"', reply_markup=markup)
 
 #clear function
 @bot.message_handler(commands=['clear'])
@@ -28,7 +34,7 @@ def help(message):
 	global user_data
 	user_data[message.from_user.id] = []
 	markup = types.ReplyKeyboardMarkup() 
-	clear_markup1 = types.KeyboardButton('Предметы') 
+	clear_markup1 = types.KeyboardButton('Решение задач') 
 	markup.add(clear_markup1)
 	bot.send_message(message.from_user.id, 'История очищена!', reply_markup=markup)
 	
@@ -36,28 +42,61 @@ def help(message):
 @bot.message_handler(content_types=['text'])			
 def main(message):
 	global user_data			#setting local data to simplify the program
+	global country_data
 	print(user_data)
 	if message.from_user.id not in user_data:
 		user_data[message.from_user.id] = []
 	local_data = user_data[message.from_user.id]
 	if len(local_data) == 0:			#main branch
-		if message.text.lower() == 'предмет' or message.text.lower() == 'предметы':
+		if message.text.lower() == 'решение задач':
 			markup = types.ReplyKeyboardMarkup()    
-			subjbut1 = types.KeyboardButton('Физика') 			
+			subjbut1 = types.KeyboardButton('Физика') 
+			subjbut2 = types.KeyboardButton('Информатика') 
+			markup.add(subjbut1)
+			bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
+			local_data.append(message.text.lower())
+		if message.text.lower() == 'справочные материалы':
+			markup = types.ReplyKeyboardMarkup()    
+			subjbut1 = types.KeyboardButton('География')
 			markup.add(subjbut1)
 			bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
 			local_data.append(message.text.lower())
 		else:
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help')
-	elif len(local_data) == 1:			#subject branch
+
+			
+	elif len(local_data) == 1 and local_data[0] == 'справочные материалы':
+		bot.send_message(message.from_user.id, 'Введи название страны, что бы получить основную информацию о ней:')
+		local_data.append(message.text.lower())
+
+	elif len(local_data) == 2 and local_data[0] == 'справочные материалы':
+		if message.text.title() in country_data:
+			local_data.append(message.text.lower())
+			text = f"---{country_data[str(local_data[2].title())][1]}---\n ‣Столица: {country_data[str(local_data[2].title())][2]}\n  ‣Дата основания: {country_data[str(local_data[2].title())][3]}\n ‣Численность населения(млн. чел): {country_data[str(local_data[2].title())][4]}\n ‣Форма правления: {country_data[str(local_data[2].title())][5]}\n ‣Глава государства и должность: {country_data[str(local_data[2].title())][6]}\n ‣Официльный(е) язык(и): {country_data[str(local_data[2].title())][7]}\n ‣Валюта: {country_data[str(local_data[2].title())][8]}\n"
+			bot.send_photo(message.from_user.id, photo=country_data[local_data[2].title()][0], caption=text)
+			user_data[message.from_user.id] = []    
+		else:
+			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, видимо в нашей базе ещё нет этой страны.')
+
+	#0 - флаг 1-название 2-дата основания 3-население 4-форма правления 5-глава и пост
+
+
+
+
+	elif len(local_data) == 1 and local_data[0] == 'решение задач':			#subject branch
 		if message.text.lower() == 'физика':
 			markup = types.ReplyKeyboardMarkup()
 			physchapter1 = types.KeyboardButton('Термодинамика')
 			markup.add(physchapter1)
 			bot.send_message(message.from_user.id, "Выберите раздел", reply_markup=markup)
 			local_data.append(message.text.lower())
+		elif message.text.lower() == 'информатика':
+			bot.send_message(message.from_user.id, "В разработке")
 		else:
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, выбери нужный тебе предмет:')
+
+
+
 	elif len(local_data) == 2:			#chapter branch
 		if message.text.lower() == 'термодинамика':
 			markup = types.ReplyKeyboardMarkup()
