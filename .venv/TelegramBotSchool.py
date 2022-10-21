@@ -8,7 +8,8 @@ from math import sqrt
 bot = telebot.TeleBot('5670990101:AAHCY6UcN3pZC43P5FbVulljTAZVrlo4TWA');
 user_data = {}			
 country_data = {'Россия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', 'Российская Федерация', 'Москва', '25.12.1991', '147 млн. человек', 'республика', 'Владимир Владимирович Путин, президент РФ (на 2022)', 'русский', 'российский рубль, ₽ (RUB)'], 
-				'Япония': ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/320px-Flag_of_Japan.svg.png', 'Япония', 'Токио', '11.02.660 до н.э.', '125 млн. человек', 'конституционная монархия', 'Нарухито, император\n Фумио Кисида, премьер-министр (на 2022)', 'японский', 'японская иена, ¥ (JPY)']}
+				'Япония': ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/320px-Flag_of_Japan.svg.png', 'Япония', 'Токио', '11.02.660 до н.э.', '125 млн. человек', 'конституционная монархия', 'Нарухито, император\n Фумио Кисида, премьер-министр (на 2022)', 'японский', 'японская иена, ¥ (JPY)'],
+				'Франция': ['https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_France_%281794–1815%2C_1830–1974%2C_2020–present%29.svg/160px-Flag_of_France_%281794–1815%2C_1830–1974%2C_2020–present%29.svg.png', 'Французская Республика', 'Париж', '04.10.1958', '68 млн. чел', 'президентско-парламентская республика', 'Эмманюэль Макрон, президент (на 2022)', 'французкий', 'евро, € (EUR)']}
 
 @bot.message_handler(commands=['start'])			
 def greetings(message):			#ФУНКЦИЯ СТАРТ	
@@ -31,7 +32,7 @@ def help(message):				#ФУНКЦИЯ ПОМОЩИ
 	clear_markup2 = types.KeyboardButton('Справочные материалы') 
 	clear_markup3 = types.KeyboardButton('Конвертер величин') 
 	markup.add(clear_markup1, clear_markup2, clear_markup3)
-	bot.send_message(message.from_user.id, f'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)\n\n   {message.from_user.first_name}, напиши "решение задач" или "справочные материалы"', reply_markup=markup)
+	bot.send_message(message.from_user.id, f'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)\n\n   {message.from_user.first_name}, напиши "решение задач", "конвертер величин" или "справочные материалы"', reply_markup=markup)
 
 @bot.message_handler(commands=['clear'])
 def clear(message):				#ФУНКЦИЯ ОЧИСТКИ
