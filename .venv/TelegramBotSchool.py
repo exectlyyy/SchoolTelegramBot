@@ -2,12 +2,13 @@ from threading import local
 import telebot
 from telebot import types
 from random import *
+from math import sqrt
 
 bot = telebot.TeleBot('5670990101:AAHCY6UcN3pZC43P5FbVulljTAZVrlo4TWA');
 user_data = {}			#creating a dictionary with all user inputs to correct working
 #0 - флаг 1-название 2 - столица 3-дата основания 4-население 5-форма правления 6-глава и пост 7 - официальные языки 8 -  валюта 
 country_data = {'Россия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', 'Российская Федерация', 'Москва', '25.12.1991', '147 млн. человек', 'республика', 'Владимир Владимирович Путин, президент РФ (на 2022)', 'русский', 'российский рубль, ₽ (RUB)'], 
-				'Япония': ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/320px-Flag_of_Japan.svg.png', 'Япония', 'Токио', '11.02.660 до н.э.', '125 млню человек', 'конституционная монархия', 'Нарухито, император\n Фумио Кисида, премьер-министр (на 2022)', 'японский', 'японская иена, ¥ (JPY)']}
+				'Япония': ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/320px-Flag_of_Japan.svg.png', 'Япония', 'Токио', '11.02.660 до н.э.', '125 млн. человек', 'конституционная монархия', 'Нарухито, император\n Фумио Кисида, премьер-министр (на 2022)', 'японский', 'японская иена, ¥ (JPY)']}
 
 #start function
 @bot.message_handler(commands=['start'])
@@ -36,7 +37,8 @@ def help(message):
 	user_data[message.from_user.id] = []
 	markup = types.ReplyKeyboardMarkup() 
 	clear_markup1 = types.KeyboardButton('Решение задач') 
-	markup.add(clear_markup1)
+	clear_markup2 = types.KeyboardButton('Справочные материалы') 
+	markup.add(clear_markup1, clear_markup2)
 	bot.send_message(message.from_user.id, 'История очищена!', reply_markup=markup)
 	
 #main function
@@ -52,11 +54,11 @@ def main(message):
 		if message.text.lower() == 'решение задач':
 			markup = types.ReplyKeyboardMarkup()    
 			subjbut1 = types.KeyboardButton('Физика') 
-			subjbut2 = types.KeyboardButton('Информатика') 
-			markup.add(subjbut1)
+			subjbut2 = types.KeyboardButton('Математика') 
+			markup.add(subjbut1, subjbut2)
 			bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
 			local_data.append(message.text.lower())
-		if message.text.lower() == 'справочные материалы':
+		elif message.text.lower() == 'справочные материалы':
 			markup = types.ReplyKeyboardMarkup()    
 			subjbut1 = types.KeyboardButton('География')
 			markup.add(subjbut1)
@@ -91,8 +93,12 @@ def main(message):
 			markup.add(physchapter1)
 			bot.send_message(message.from_user.id, "Выберите раздел", reply_markup=markup)
 			local_data.append(message.text.lower())
-		elif message.text.lower() == 'информатика':
-			bot.send_message(message.from_user.id, "В разработке")
+		elif message.text.lower() == 'математика':
+			markup = types.ReplyKeyboardMarkup()
+			physchapter1 = types.KeyboardButton('Алгебра')
+			markup.add(physchapter1)
+			bot.send_message(message.from_user.id, "Выберите раздел", reply_markup=markup)
+			local_data.append(message.text.lower())
 		else:
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, выбери нужный тебе предмет:')
 
@@ -108,8 +114,32 @@ def main(message):
 			markup.add(PhysicsThermodynamics1, PhysicsThermodynamics2, PhysicsThermodynamics3, PhysicsThermodynamics4)
 			bot.send_message(message.from_user.id, "Выберите неизвестное", reply_markup=markup)
 			local_data.append(message.text.lower())
+		elif message.text.lower() == 'алгебра':
+			markup = types.ReplyKeyboardMarkup()
+			math1 = types.KeyboardButton('Квадратные уравнения')
+			markup.add(math1)
+			bot.send_message(message.from_user.id, "Выберите тип задачи:", reply_markup=markup)
+			local_data.append(message.text.lower())
 		else:
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, выбери нужный тебе раздел:')
+
+
+
+	elif len(local_data) == 3 and message.text.lower() == 'квадратные уравнения':
+		bot.send_message(message.from_user.id, "Введите коэффиценты уравнения через пробел.")
+		local_data.append(message.text.lower())
+		
+	elif len(local_data) == 4 and local_data[3] == 'квадратные уравнения':
+		cf = message.text.split()
+		if len(cf) == 3 and float(cf[0]) != 0:
+			cf[0] = float(cf[0])
+			cf[1] = float(cf[1])
+			cf[2] = float(cf[2])
+			if cf[1] > 0 and cf[2] > 0:
+				bot.send_message(message.from_user.id, f'---Уравнение---\n{cf[0]}x²+{cf[1]}x+{cf[2]}=0\nD = {cf[1]}² - 4 * {cf[0]} * {cf[2]} = {(cf[1] ** 2) - 4 * cf[0] * cf[2]}\n x₁ = -{cf[1]} + √D / 2 * {cf[0]} = {(cf[1] + sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}\n x₂ = -{cf[1]} - √D / 2 * {cf[0]} = {(cf[1] - sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}\n  Ответ: {(cf[1] + sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}, {(cf[1] - sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}')
+			user_data[message.from_user.id] = []
+		else:
+			bot.send_message(message.from_user.id, 'Что-то введено некорректно.')
 
 
 
