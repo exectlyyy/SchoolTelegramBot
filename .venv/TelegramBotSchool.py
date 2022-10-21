@@ -27,9 +27,10 @@ def help(message):				#ФУНКЦИЯ ПОМОЩИ
 	global user_data
 	user_data[message.from_user.id] = []
 	markup = types.ReplyKeyboardMarkup() 
-	BranchMarkup1 = types.KeyboardButton('Решение задач') 
-	BranchMarkup2 = types.KeyboardButton('Справочные материалы') 
-	markup.add(BranchMarkup1, BranchMarkup2)
+	clear_markup1 = types.KeyboardButton('Решение задач') 
+	clear_markup2 = types.KeyboardButton('Справочные материалы') 
+	clear_markup3 = types.KeyboardButton('Конвертер величин') 
+	markup.add(clear_markup1, clear_markup2, clear_markup3)
 	bot.send_message(message.from_user.id, f'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)\n\n   {message.from_user.first_name}, напиши "решение задач" или "справочные материалы"', reply_markup=markup)
 
 @bot.message_handler(commands=['clear'])
@@ -39,7 +40,8 @@ def clear(message):				#ФУНКЦИЯ ОЧИСТКИ
 	markup = types.ReplyKeyboardMarkup() 
 	clear_markup1 = types.KeyboardButton('Решение задач') 
 	clear_markup2 = types.KeyboardButton('Справочные материалы') 
-	markup.add(clear_markup1, clear_markup2)
+	clear_markup3 = types.KeyboardButton('Конвертер величин') 
+	markup.add(clear_markup1, clear_markup2, clear_markup3)
 	bot.send_message(message.from_user.id, 'История очищена!', reply_markup=markup)
 
 @bot.message_handler(content_types=['text'])			
@@ -63,6 +65,12 @@ def main(message):
 			markup.add(SubjectButton1)
 			bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
 			local_data.append(message.text.lower())
+		elif message.text.lower() == 'конвертер величин':
+			markup = types.ReplyKeyboardMarkup()    
+			TypeButton1 = types.KeyboardButton('Скорость')
+			markup.add(TypeButton1)
+			bot.send_message(message.from_user.id, "Выберите тип величины", reply_markup=markup)
+			local_data.append(message.text.lower())
 		else:
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help')
 	elif len(local_data) == 1 and local_data[0] == 'справочные материалы': 													#ВЕТКА СПРАВОЧНЫЕ МАТЕРИАЛЫ
@@ -70,6 +78,13 @@ def main(message):
 		markup = types.ReplyKeyboardRemove(selective=False)
 		if local_data[1] == 'география':
 			bot.send_message(message.from_user.id, 'Введи название страны, что бы получить основную информацию о ней:', reply_markup=markup)
+		else:
+			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help', reply_markup=markup)
+	elif len(local_data) == 1 and local_data[0] == 'конвертер величин': 													#ВЕТКА СПРАВОЧНЫЕ МАТЕРИАЛЫ
+		local_data.append(message.text.lower())
+		markup = types.ReplyKeyboardRemove(selective=False)
+		if local_data[1] == 'скорость':
+			bot.send_message(message.from_user.id, 'Введи числовое значение величины', reply_markup=markup)
 		else:
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help', reply_markup=markup)
 	elif len(local_data) == 2 and local_data[0] == 'справочные материалы' and local_data[1] == 'география':						#ВЫВОДИТ СПРАВКУ О СТРАНАХ			markup = types.ReplyKeyboardRemove(selective=False)
@@ -107,7 +122,7 @@ def main(message):
 			SubjectButton2 = types.KeyboardButton('Математика') 
 			markup.add(SubjectButton1, SubjectButton2)
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, выбери нужный тебе предмет:', reply_markup=markup)
-	elif len(local_data) == 2:																								#ВЕТКА С КОНКРЕТНЫМИ ЗАДАЧАМИ
+	elif len(local_data) == 2 and message.text.lower() == 'термодинамика' or message.text.lower() == 'алгебра':																								#ВЕТКА С КОНКРЕТНЫМИ ЗАДАЧАМИ
 		if message.text.lower() == 'термодинамика':
 			markup = types.ReplyKeyboardMarkup()
 			PhysicsThermodynamics1 = types.KeyboardButton('Q')
@@ -254,5 +269,26 @@ m = {int(local_data[4])} / ({int(local_data[5])} * ({int(local_data[7])} - {int(
 m = {float(local_data[4]) / (float(local_data[5]) * ((float(local_data[7]) - float(local_data[6]))))} кг
 Ответом на эту задачу является: {round(float(int(local_data[4]) / (int(local_data[5]) * ((int(local_data[7]) - int(local_data[6]))))), 3)} кг.''')
 		user_data[message.from_user.id] = []	
+	elif len(local_data) == 2 and local_data[1] == 'скорость':
+		local_data.append(float(message.text))
+		markup = types.ReplyKeyboardMarkup()
+		Speed1 = types.KeyboardButton('км/ч')
+		Speed2 = types.KeyboardButton('м/с')
+		markup.add(Speed1, Speed2)
+		# = types.KeyboardButton('t₁')
+		# = types.KeyboardButton('t₂')
+		# = types.KeyboardButton('m')
+		bot.send_message(message.from_user.id, 'Выберите вашу величину', reply_markup=markup)
+	elif len(local_data) == 3 and message.text.lower() == 'км/ч':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''км/ч - {speed}
+м/с - {speed / 3.6}''')
+		user_data[message.from_user.id] = []	
+	elif len(local_data) == 3 and message.text.lower() == 'м/с':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''км/ч - {speed * 3.6}
+м/с - {speed}''')
+		user_data[message.from_user.id] = []	
+
 	print(user_data)                                                                                                                                   
 bot.infinity_polling(timeout=1080)
