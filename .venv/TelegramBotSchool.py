@@ -136,8 +136,12 @@ def main(message):
 			cf[0] = float(cf[0])
 			cf[1] = float(cf[1])
 			cf[2] = float(cf[2])
-			if cf[1] > 0 and cf[2] > 0:
-				bot.send_message(message.from_user.id, f'---Уравнение---\n{cf[0]}x²+{cf[1]}x+{cf[2]}=0\nD = {cf[1]}² - 4 * {cf[0]} * {cf[2]} = {(cf[1] ** 2) - 4 * cf[0] * cf[2]}\n x₁ = -{cf[1]} + √D / 2 * {cf[0]} = {(cf[1] + sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}\n x₂ = -{cf[1]} - √D / 2 * {cf[0]} = {(cf[1] - sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}\n  Ответ: {(cf[1] + sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}, {(cf[1] - sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}')
+			bot.send_message(message.from_user.id, f'''---Уравнение---
+{cf[0]}x²+{cf[1]}x+{cf[2]}=0
+D = {cf[1]}² - 4 * {cf[0]} * {cf[2]} = {(cf[1] ** 2) - 4 * cf[0] * cf[2]}
+x₁ = -{cf[1]} + √D / 2 * {cf[0]} = {(cf[1] + sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}
+x₂ = -{cf[1]} - √D / 2 * {cf[0]} = {(cf[1] - sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}
+Ответ: {(cf[1] + sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}, {(cf[1] - sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}''')
 			user_data[message.from_user.id] = []
 		else:
 			bot.send_message(message.from_user.id, 'Что-то введено некорректно.')
