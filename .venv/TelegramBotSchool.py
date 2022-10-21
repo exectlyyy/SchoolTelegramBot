@@ -10,7 +10,6 @@ user_data = {}
 country_data = {'Россия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', 'Российская Федерация', 'Москва', '25.12.1991', '147 млн. человек', 'республика', 'Владимир Владимирович Путин, президент РФ (на 2022)', 'русский', 'российский рубль, ₽ (RUB)'], 
 				'Япония': ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/320px-Flag_of_Japan.svg.png', 'Япония', 'Токио', '11.02.660 до н.э.', '125 млн. человек', 'конституционная монархия', 'Нарухито, император\n Фумио Кисида, премьер-министр (на 2022)', 'японский', 'японская иена, ¥ (JPY)']}
 
-
 @bot.message_handler(commands=['start'])			
 def greetings(message):			#ФУНКЦИЯ СТАРТ	
 	markup = types.ReplyKeyboardMarkup()    
@@ -46,7 +45,7 @@ def clear(message):				#ФУНКЦИЯ ОЧИСТКИ
 @bot.message_handler(content_types=['text'])			
 def main(message):
 	global user_data			
-	global country_data
+	global country_data																									#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
 	if message.from_user.id not in user_data: 																			#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
 		user_data[message.from_user.id] = []
 	local_data = user_data[message.from_user.id]
@@ -115,7 +114,8 @@ def main(message):
 			PhysicsThermodynamics2 = types.KeyboardButton('c')
 			PhysicsThermodynamics3 = types.KeyboardButton('t₁')
 			PhysicsThermodynamics4 = types.KeyboardButton('t₂')
-			markup.add(PhysicsThermodynamics1, PhysicsThermodynamics2, PhysicsThermodynamics3, PhysicsThermodynamics4)
+			PhysicsThermodynamics5 = types.KeyboardButton('m')
+			markup.add(PhysicsThermodynamics1, PhysicsThermodynamics2, PhysicsThermodynamics3, PhysicsThermodynamics4, PhysicsThermodynamics5)
 			bot.send_message(message.from_user.id, "Выберите неизвестное", reply_markup=markup)
 			local_data.append(message.text.lower())
 		elif message.text.lower() == 'алгебра':
@@ -250,5 +250,5 @@ m = {int(local_data[4])} / ({int(local_data[5])} * ({int(local_data[7])} - {int(
 m = {float(local_data[4]) / (float(local_data[5]) * ((float(local_data[7]) - float(local_data[6]))))} кг
 Ответом на эту задачу является: {round(float(int(local_data[4]) / (int(local_data[5]) * ((int(local_data[7]) - int(local_data[6]))))), 3)} кг.''')
 		user_data[message.from_user.id] = []	
-	print(user_data)                                                                                                                                  
+	print(user_data)                                                                                                                                   
 bot.infinity_polling(timeout=1080)
