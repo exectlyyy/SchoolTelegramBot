@@ -148,16 +148,109 @@ def main(message):
 		local_data.append(message.text.lower())
 	elif len(local_data) == 4 and local_data[3] == 'квадратные уравнения':												#ВЕТКА РЕШЕНИЯ УРАВНЕНИЯ ДОПИЛИТЬ!!!
 		cf = message.text.split()
-		if len(cf) == 3 and float(cf[0]) != 0:
-			cf[0] = float(cf[0])
-			cf[1] = float(cf[1])
-			cf[2] = float(cf[2])
-			bot.send_message(message.from_user.id, f'''---Уравнение---
-{cf[0]}x²+{cf[1]}x+{cf[2]}=0
-D = {cf[1]}² - 4 * {cf[0]} * {cf[2]} = {(cf[1] ** 2) - 4 * cf[0] * cf[2]}
-x₁ = -{cf[1]} + √D / 2 * {cf[0]} = {(cf[1] + sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}
-x₂ = -{cf[1]} - √D / 2 * {cf[0]} = {(cf[1] - sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}
-Ответ: {(cf[1] + sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}, {(cf[1] - sqrt((cf[1] ** 2) - 4 * cf[0] * cf[2])) / 2 * cf[0]}''')
+		if len(cf) == 3:
+			a = float(cf[0])
+			b = float(cf[1])
+			c = float(cf[2])
+			D = (b ** 2) - (4 * a * c)
+			if a == 0:
+					bot.send_message(message.from_user.id, f'''Уравнение не является квадратным, так как а = 0''')
+			elif D > 0:
+				if a > 0:
+					if not b <= 0:
+						if not c <= 0:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²+{b}x+{c}=0
+D = {b}² - 4 * {a} * {c} = {D}
+x₁ = (-({b}) + √{D}) / (2 * {a}) = {(-(b) + sqrt(D)) / (2 * a)}
+x₂ = (-({b}) - √{D}) / (2 * {a}) = {(-(b) - sqrt(D)) / (2 * a)}''')
+						else:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²+{b}x{c}=0
+D = {b}² + 4 * {a} * {str(c)[1:]} = {D}
+x₁ = (-({b}) + √{D}) / (2 * {a}) = {(-(b) + sqrt(D)) / (2 * a)}
+x₂ = (-({b}) - √{D}) / (2 * {a}) = {(-(b) - sqrt(D)) / (2 * a)}''')
+					else:
+						if not c <= 0:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²{b}x+{c}=0
+D = ({b})² - 4 * {a} * {c} = {D}
+x₁ = ({str(b)[1:]} + √{D}) / (2 * {a}) = {(-(b) + sqrt(D)) / (2 * a)}
+x₂ = ({str(b)[1:]} - √{D}) / (2 * {a}) = {(-(b) - sqrt(D)) / (2 * a)}''')
+						else:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²{b}x+{c}=0
+D = ({b})² - 4 * {a} * {c} = {D}
+x₁ = ({str(b)[1:]} + √{D}) / (2 * {a}) = {(-(b) + sqrt(D)) / (2 * a)}
+x₂ = ({str(b)[1:]} - √{D}) / (2 * {a}) = {(-(b) - sqrt(D)) / (2 * a)}''')
+				else:
+					if not b <= 0:
+						if not c <= 0:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²+{b}x+{c}=0
+D = {b}² + 4 * {str(a)[1:]} * {c} = {D}
+x₁ = (-({b}) + √{D}) / -(2 * {str(a)[1:]}) = {(-(b) + sqrt(D)) / (2 * a)}
+x₂ = (-({b}) - √{D}) / -(2 * {str(a)[1:]}) = {(-(b) - sqrt(D)) / (2 * a)}''')
+						else:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²+{b}x{c}=0
+D = {b}² - 4 * {str(a)[1:]} * {str(c)[1:]} = {D}
+x₁ = (-({b}) + √{D}) / -(2 * {str(a)[1:]}) = {(-(b) + sqrt(D)) / (2 * a)}
+x₂ = (-({b}) - √{D}) / -(2 * {str(a)[1:]}) = {(-(b) - sqrt(D)) / (2 * a)}''')
+					else:
+						if not c <= 0:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²{b}x+{c}=0
+D = ({b})² + 4 * {str(a)[1:]} * {c} = {D}
+x₁ = ({str(b)[1:]} + √{D}) / -(2 * {str(a)[1:]}) = {(-(b) + sqrt(D)) / (2 * a)}
+x₂ = ({str(b)[1:]} - √{D}) / -(2 * {str(a)[1:]}) = {(-(b) - sqrt(D)) / (2 * a)}''')
+						else:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²{b}x+{c}=0
+D = ({b})² - 4 * {str(a)[1:]} * {str(c)[1:]} = {D}
+x₁ = ({str(b)[1:]} + √{D}) / -(2 * {str(a)[1:]}) = {(-(b) + sqrt(D)) / (2 * a)}
+x₂ = ({str(b)[1:]} - √{D}) / -(2 * {str(a)[1:]}) = {(-(b) - sqrt(D)) / (2 * a)}''')	
+			elif D == 0:			#дописать
+				if a > 0:
+					if not b <= 0:
+						if not c <= 0:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²+{b}x+{c}=0
+D = {b}² - 4 * {a} * {c} = {D}
+x = (-({b}) + √{D}) / (2 * {a}) = {(-(b) + sqrt(D)) / (2 * a)}
+''')
+						else:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²+{b}x{c}=0
+D = {b}² + 4 * {a} * {str(c)[1:]} = {D}
+x = (-({b}) + √{D}) / (2 * {a}) = {(-(b) + sqrt(D)) / (2 * a)}
+''')
+					else:
+						if not c <= 0:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²{b}x+{c}=0
+D = ({b})² - 4 * {a} * {c} = {D}
+x = ({str(b)[1:]} + √{D}) / (2 * {a}) = {(-(b) + sqrt(D)) / (2 * a)}
+''')
+						else:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²{b}x+{c}=0
+D = ({b})² - 4 * {a} * {c} = {D}
+x = ({str(b)[1:]} + √{D}) / (2 * {a}) = {(-(b) + sqrt(D)) / (2 * a)}
+''')
+				else:
+					if not b <= 0:
+						if not c <= 0:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²+{b}x+{c}=0
+D = {b}² + 4 * {str(a)[1:]} * {c} = {D}
+x = (-({b}) + √{D}) / -(2 * {str(a)[1:]}) = {(-(b) + sqrt(D)) / (2 * a)}
+''')
+						else:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²+{b}x{c}=0
+D = {b}² - 4 * {str(a)[1:]} * {str(c)[1:]} = {D}
+x = (-({b}) + √{D}) / -(2 * {str(a)[1:]}) = {(-(b) + sqrt(D)) / (2 * a)}
+''')
+					else:
+						if not c <= 0:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²{b}x+{c}=0
+D = ({b})² + 4 * {str(a)[1:]} * {c} = {D}
+x = ({str(b)[1:]} + √{D}) / -(2 * {str(a)[1:]}) = {(-(b) + sqrt(D)) / (2 * a)}
+''')
+						else:
+							bot.send_message(message.from_user.id, f'''Уравнение {a}x²{b}x+{c}=0
+D = ({b})² - 4 * {str(a)[1:]} * {str(c)[1:]} = {D}
+x = ({str(b)[1:]} + √{D}) / -(2 * {str(a)[1:]}) = {(-(b) + sqrt(D)) / (2 * a)}
+''')	
+			else:
+				bot.send_message(message.from_user.id, f'''Уравнение не имеет решений, так как дискриминат меньше нуля''')
 			user_data[message.from_user.id] = []
 		else:
 			bot.send_message(message.from_user.id, 'Что-то введено некорректно.')
