@@ -6,7 +6,8 @@ from random import *
 from math import sqrt
 
 bot = telebot.TeleBot('5670990101:AAHCY6UcN3pZC43P5FbVulljTAZVrlo4TWA');
-user_data = {}			
+user_data = {}	
+ideas_data = {}	
 country_data = {'Россия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', 'Российская Федерация', 'Москва', '25.12.1991', '147 млн. человек', 'республика', 'Владимир Владимирович Путин, президент РФ (на 2022)', 'русский', 'российский рубль, ₽ (RUB)', 'https://ru.wikipedia.org/wiki/Россия'], 
 				'Япония': ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/320px-Flag_of_Japan.svg.png', 'Япония', 'Токио', '11.02.660 до н.э.', '125 млн. человек', 'конституционная монархия', 'Нарухито, император\n Фумио Кисида, премьер-министр (на 2022)', 'японский', 'японская иена, ¥ (JPY)', 'https://ru.wikipedia.org/wiki/Япония'],
 				'Франция': ['https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_France_%281794–1815%2C_1830–1974%2C_2020–present%29.svg/160px-Flag_of_France_%281794–1815%2C_1830–1974%2C_2020–present%29.svg.png', 'Французская Республика', 'Париж', '04.10.1958', '68 млн. чел', 'президентско-парламентская республика', 'Эмманюэль Макрон, президент (на 2022)', 'французкий', 'евро, € (EUR)', 'https://ru.wikipedia.org/wiki/Франция'],
@@ -20,6 +21,11 @@ def greetings(message):			#ФУНКЦИЯ СТАРТ
 	HelpMarkup = types.KeyboardButton('/help')  
 	markup.add(HelpMarkup)
 	bot.send_message(message.from_user.id, f'Привет, {message.from_user.first_name}, этот бот поможет тебе в решении задач по таким предметам как физика.', reply_markup=markup)
+
+@bot.message_handler(commands=['idea'])			
+def idea(message):			#ФУНКЦИЯ ИДЕЙ
+	markup = types.ReplyKeyboardRemove(selective=False)
+	bot.send_message(message.from_user.id, f'Напиши сообщение, начинающееся на слово идея и оно будет передано моим создателям.', reply_markup=markup)
 
 @bot.message_handler(commands=['cat'])				
 def cat(message):				#ФУНКЦИЯ С КОТАМИ
@@ -35,7 +41,12 @@ def help(message):				#ФУНКЦИЯ ПОМОЩИ
 	clear_markup2 = types.KeyboardButton('Справочные материалы') 
 	clear_markup3 = types.KeyboardButton('Конвертер величин') 
 	markup.add(clear_markup1, clear_markup2, clear_markup3)
-	bot.send_message(message.from_user.id, f'Список команд:\n  /clear -  очищает актуальный кэш бота и возвращает к началу.\n /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)\n\n   {message.from_user.first_name}, напиши "решение задач", "конвертер величин" или "справочные материалы"', reply_markup=markup)
+	bot.send_message(message.from_user.id, f'''Список команд:
+ /clear -  очищает актуальный кэш бота и возвращает к началу.
+ /cat -  отправляет фотографию котика, чтобы скрасить тяжелые будни)
+ /idea - что бы предложить идею создателям бота, возможно она будет реализована в дальшейшем.
+	
+{message.from_user.first_name}, напиши "решение задач", "конвертер величин" или "справочные материалы"''', reply_markup=markup)
 
 @bot.message_handler(commands=['clear'])
 def clear(message):				#ФУНКЦИЯ ОЧИСТКИ
@@ -51,12 +62,19 @@ def clear(message):				#ФУНКЦИЯ ОЧИСТКИ
 @bot.message_handler(content_types=['text'])			
 def main(message):
 	global user_data			
-	global country_data																									#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
+	global country_data	
+	global ideas_data				
+	if message.from_user.id not in ideas_data: 																			#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
+		ideas_data[message.from_user.id] = [message.from_user.first_name]																				#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
 	if message.from_user.id not in user_data: 																			#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
 		user_data[message.from_user.id] = []
 	local_data = user_data[message.from_user.id]
-	if len(local_data) == 0:																							#ОСНОВНАЯ ВЕТКА (РЕШЕНИЕ ЗАДАЧ\СПРАВОЧНЫЕ МАТЕРИАЛЫ)
-		if message.text.lower() == 'решение задач':
+	if len(local_data) == 0:
+		if message.text.lower()[:4] == 'идея':
+			markup = types.ReplyKeyboardRemove(selective=False)
+			bot.send_message(message.from_user.id, "Спасибо за идею!", reply_markup=markup)	
+			ideas_data[message.from_user.id].append(message.text.lower()[4:])																						#ОСНОВНАЯ ВЕТКА (РЕШЕНИЕ ЗАДАЧ\СПРАВОЧНЫЕ МАТЕРИАЛЫ)
+		elif message.text.lower() == 'решение задач':
 			markup = types.ReplyKeyboardMarkup()    
 			SubjectButton1 = types.KeyboardButton('Физика') 
 			SubjectButton2 = types.KeyboardButton('Математика') 
@@ -372,21 +390,42 @@ m = {float(local_data[4]) / (float(local_data[5]) * ((float(local_data[7]) - flo
 		markup = types.ReplyKeyboardMarkup()
 		Speed1 = types.KeyboardButton('км/ч')
 		Speed2 = types.KeyboardButton('м/с')
-		markup.add(Speed1, Speed2)
-		# = types.KeyboardButton('t₁')
-		# = types.KeyboardButton('t₂')
-		# = types.KeyboardButton('m')
+		Speed3 = types.KeyboardButton('км/мин')
+		Speed4 = types.KeyboardButton('м/мин')
+		markup.add(Speed1, Speed2, Speed3, Speed4)
 		bot.send_message(message.from_user.id, 'Выберите вашу величину', reply_markup=markup)
 	elif len(local_data) == 3 and message.text.lower() == 'км/ч':
 		speed = round(float(local_data[2]), 3)
 		bot.send_message(message.from_user.id, f'''км/ч - {speed}
-м/с - {speed / 3.6}''')
+км/мин - {speed / 60}
+м/с - {speed / 3.6}
+м/мин - {speed / 3.6 * 60}
+''')
 		user_data[message.from_user.id] = []	
 	elif len(local_data) == 3 and message.text.lower() == 'м/с':
 		speed = round(float(local_data[2]), 3)
 		bot.send_message(message.from_user.id, f'''км/ч - {speed * 3.6}
-м/с - {speed}''')
+км/мин - {speed * 3.6 / 60}
+м/с - {speed}
+м/мин - {speed * 60}
+''')
 		user_data[message.from_user.id] = []	
-
-	print(user_data)                                                                                                                                   
+	elif len(local_data) == 3 and message.text.lower() == 'км/мин':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''км/ч - {speed / 60}
+км/мин - {speed}
+м/с - {speed / 60 / 3.6}
+м/мин - {speed / 3.6}
+''')
+		user_data[message.from_user.id] = []	
+	elif len(local_data) == 3 and message.text.lower() == 'м/мин':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''км/ч - {speed * 3.6 * 60}
+км/мин - {speed * 3.6}
+м/с - {speed * 60}
+м/мин - {speed}
+''')
+		user_data[message.from_user.id] = []
+	print(user_data)      
+	print(ideas_data)                                                                                                                             
 bot.infinity_polling(timeout=1080)
