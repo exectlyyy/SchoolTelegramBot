@@ -9,10 +9,13 @@ bot = telebot.TeleBot('5670990101:AAHCY6UcN3pZC43P5FbVulljTAZVrlo4TWA');
 user_data = {}	
 ideas_data = {}	
 country_data = {'Россия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', 'Российская Федерация', 'Москва', '25.12.1991', '147 млн. человек', 'республика', 'Владимир Владимирович Путин, президент РФ (на 2022)', 'русский', 'российский рубль, ₽ (RUB)', 'https://ru.wikipedia.org/wiki/Россия'], 
+				'Рф': ['https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Russia.svg/320px-Flag_of_Russia.svg.png', 'Российская Федерация', 'Москва', '25.12.1991', '147 млн. человек', 'республика', 'Владимир Владимирович Путин, президент РФ (на 2022)', 'русский', 'российский рубль, ₽ (RUB)', 'https://ru.wikipedia.org/wiki/Россия'], 
 				'Япония': ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Flag_of_Japan.svg/320px-Flag_of_Japan.svg.png', 'Япония', 'Токио', '11.02.660 до н.э.', '125 млн. человек', 'конституционная монархия', 'Нарухито, император\n Фумио Кисида, премьер-министр (на 2022)', 'японский', 'японская иена, ¥ (JPY)', 'https://ru.wikipedia.org/wiki/Япония'],
 				'Франция': ['https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_France_%281794–1815%2C_1830–1974%2C_2020–present%29.svg/160px-Flag_of_France_%281794–1815%2C_1830–1974%2C_2020–present%29.svg.png', 'Французская Республика', 'Париж', '04.10.1958', '68 млн. чел', 'президентско-парламентская республика', 'Эмманюэль Макрон, президент (на 2022)', 'французкий', 'евро, € (EUR)', 'https://ru.wikipedia.org/wiki/Франция'],
 				'Кндр': ['https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Flag_of_North_Korea.svg/160px-Flag_of_North_Korea.svg.png', 'Корейская Народно-Демократическая Республика', 'Пхеньян', '09.09.1948', '25,9 млн. чел.', 'однопартийная парламентская республика', 'Ким Чен Ын, председатель гос. совета (на 2022)', 'корейский', 'северокорейская вона (KPW)', 'https://ru.wikipedia.org/wiki/Корейская_Народно-Демократическая_Республика'],
 				'Оаэ': ['https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_United_Arab_Emirates.svg/160px-Flag_of_the_United_Arab_Emirates.svg.png', 'Объединённые Арабские Эмираты', 'Абу-Даби', '02.12.1971 (независимость)', '10,2 млн. чел.', 'абсолютная монархия', 'Мухаммад ибн Заид Аль Нахайян, президент (на 2022)', 'арабский', 'дирхам ОАЭ (AED)', 'https://ru.wikipedia.org/wiki/Объединённые_Арабские_Эмираты'],
+				'Объединённые Арабские Эмираты': ['https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_United_Arab_Emirates.svg/160px-Flag_of_the_United_Arab_Emirates.svg.png', 'Объединённые Арабские Эмираты', 'Абу-Даби', '02.12.1971 (независимость)', '10,2 млн. чел.', 'абсолютная монархия', 'Мухаммад ибн Заид Аль Нахайян, президент (на 2022)', 'арабский', 'дирхам ОАЭ (AED)', 'https://ru.wikipedia.org/wiki/Объединённые_Арабские_Эмираты'],
+				'Объединенные Арабские Эмираты': ['https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_United_Arab_Emirates.svg/160px-Flag_of_the_United_Arab_Emirates.svg.png', 'Объединённые Арабские Эмираты', 'Абу-Даби', '02.12.1971 (независимость)', '10,2 млн. чел.', 'абсолютная монархия', 'Мухаммад ибн Заид Аль Нахайян, президент (на 2022)', 'арабский', 'дирхам ОАЭ (AED)', 'https://ru.wikipedia.org/wiki/Объединённые_Арабские_Эмираты'],
 				'Норвегия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/160px-Flag_of_Norway.svg.png', 'Королевство Норвегия',  'Осло', '15.12.1899', '5,5 млн. чел.', 'конституционная монархия', 'Харальд V, король\n Йонас Гар Стёре. премьер-министр (на 2022)', 'норвежский', 'норвежская крона (NOK)', 'https://ru.wikipedia.org/wiki/Норвегия']}
 
 @bot.message_handler(commands=['start'])			
@@ -63,7 +66,10 @@ def clear(message):				#ФУНКЦИЯ ОЧИСТКИ
 def main(message):
 	global user_data			
 	global country_data	
-	global ideas_data				
+	global ideas_data	
+	if message.text.lower()	== 'иди нахуй':
+		markup = types.ReplyKeyboardRemove(selective=False)
+		bot.send_message(message.from_user.id, "Сам иди нахуй", reply_markup=markup)	
 	if message.from_user.id not in ideas_data: 																			#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
 		ideas_data[message.from_user.id] = [message.from_user.first_name]																				#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
 	if message.from_user.id not in user_data: 																			#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
@@ -73,7 +79,7 @@ def main(message):
 		if message.text.lower()[:4] == 'идея':
 			markup = types.ReplyKeyboardRemove(selective=False)
 			bot.send_message(message.from_user.id, "Спасибо за идею!", reply_markup=markup)	
-			ideas_data[message.from_user.id].append(message.text.lower()[4:])																						#ОСНОВНАЯ ВЕТКА (РЕШЕНИЕ ЗАДАЧ\СПРАВОЧНЫЕ МАТЕРИАЛЫ)
+			ideas_data[message.from_user.id].append(message.text.lower()[5:])																						#ОСНОВНАЯ ВЕТКА (РЕШЕНИЕ ЗАДАЧ\СПРАВОЧНЫЕ МАТЕРИАЛЫ)
 		elif message.text.lower() == 'решение задач':
 			markup = types.ReplyKeyboardMarkup()    
 			SubjectButton1 = types.KeyboardButton('Физика') 
