@@ -67,9 +67,6 @@ def main(message):
 	global user_data			
 	global country_data	
 	global ideas_data	
-	if message.text.lower()	== 'иди нахуй':
-		markup = types.ReplyKeyboardRemove(selective=False)
-		bot.send_message(message.from_user.id, "Сам иди нахуй", reply_markup=markup)	
 	if message.from_user.id not in ideas_data: 																			#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
 		ideas_data[message.from_user.id] = [message.from_user.first_name]																				#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
 	if message.from_user.id not in user_data: 																			#СОЗДАЕТ ПЕРЕМЕННУЮ, ЗАПОМИНАЮЩУЮ СООБЩЕНИЯ
