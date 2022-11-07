@@ -1,4 +1,3 @@
-from threading import local
 import telebot
 
 from telebot import types
@@ -62,6 +61,42 @@ def clear(message):				#ФУНКЦИЯ ОЧИСТКИ
 	markup.add(clear_markup1, clear_markup2, clear_markup3)
 	bot.send_message(message.from_user.id, 'История очищена!', reply_markup=markup)
 
+def First_message(message, local_data):
+	if message.text.lower()[:4] == 'идея':
+		markup = types.ReplyKeyboardRemove(selective=False)
+		bot.send_message(message.from_user.id, "Спасибо за идею!", reply_markup=markup)	
+		ideas_data[message.from_user.id].append(message.text.lower()[5:])																						#ОСНОВНАЯ ВЕТКА (РЕШЕНИЕ ЗАДАЧ\СПРАВОЧНЫЕ МАТЕРИАЛЫ)
+	elif message.text.lower() == 'решение задач':
+		markup = types.ReplyKeyboardMarkup()    
+		SubjectButton1 = types.KeyboardButton('Физика') 
+		SubjectButton2 = types.KeyboardButton('Математика') 
+		markup.add(SubjectButton1, SubjectButton2)
+		bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
+		local_data.append(message.text.lower())
+	elif message.text.lower() == 'справочные материалы':
+		markup = types.ReplyKeyboardMarkup()    
+		SubjectButton1 = types.KeyboardButton('География')
+		markup.add(SubjectButton1)
+		bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
+		local_data.append(message.text.lower())
+	elif message.text.lower() == 'конвертер величин':
+		markup = types.ReplyKeyboardMarkup()    
+		TypeButton1 = types.KeyboardButton('Скорость')
+		markup.add(TypeButton1)
+		bot.send_message(message.from_user.id, "Выберите тип величины", reply_markup=markup)
+		local_data.append(message.text.lower())
+	else:
+		bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help')
+
+def int_round(x):
+	if x % 1 == 0:
+		return int(x)
+	else:
+		return x
+
+'''def replacetodot(x):
+	x = x.replace(',', '.', 1)'''
+	
 @bot.message_handler(content_types=['text'])			
 def main(message):
 	global user_data			
@@ -73,31 +108,7 @@ def main(message):
 		user_data[message.from_user.id] = []
 	local_data = user_data[message.from_user.id]
 	if len(local_data) == 0:
-		if message.text.lower()[:4] == 'идея':
-			markup = types.ReplyKeyboardRemove(selective=False)
-			bot.send_message(message.from_user.id, "Спасибо за идею!", reply_markup=markup)	
-			ideas_data[message.from_user.id].append(message.text.lower()[5:])																						#ОСНОВНАЯ ВЕТКА (РЕШЕНИЕ ЗАДАЧ\СПРАВОЧНЫЕ МАТЕРИАЛЫ)
-		elif message.text.lower() == 'решение задач':
-			markup = types.ReplyKeyboardMarkup()    
-			SubjectButton1 = types.KeyboardButton('Физика') 
-			SubjectButton2 = types.KeyboardButton('Математика') 
-			markup.add(SubjectButton1, SubjectButton2)
-			bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
-			local_data.append(message.text.lower())
-		elif message.text.lower() == 'справочные материалы':
-			markup = types.ReplyKeyboardMarkup()    
-			SubjectButton1 = types.KeyboardButton('География')
-			markup.add(SubjectButton1)
-			bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
-			local_data.append(message.text.lower())
-		elif message.text.lower() == 'конвертер величин':
-			markup = types.ReplyKeyboardMarkup()    
-			TypeButton1 = types.KeyboardButton('Скорость')
-			markup.add(TypeButton1)
-			bot.send_message(message.from_user.id, "Выберите тип величины", reply_markup=markup)
-			local_data.append(message.text.lower())
-		else:
-			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help')
+		First_message(message, local_data)
 	elif len(local_data) == 1 and local_data[0] == 'справочные материалы': 													#ВЕТКА СПРАВОЧНЫЕ МАТЕРИАЛЫ
 		local_data.append(message.text.lower())
 		markup = types.ReplyKeyboardRemove(selective=False)
@@ -174,10 +185,17 @@ def main(message):
 	elif len(local_data) == 4 and local_data[3] == 'квадратные уравнения':												#ВЕТКА РЕШЕНИЯ УРАВНЕНИЯ ДОПИЛИТЬ!!!
 		cf = message.text.split()
 		if len(cf) == 3:
+			cf[0] = cf[0].replace(',', '.', 1)
+			cf[1] = cf[1].replace(',', '.', 1)
+			cf[2] = cf[2].replace(',', '.', 1)
 			a = float(cf[0])
 			b = float(cf[1])
 			c = float(cf[2])
 			D = (b ** 2) - (4 * a * c)
+			a = int_round(a)
+			b = int_round(b)
+			c = int_round(c)
+			D = int_round(D)
 			if a == 0:
 					bot.send_message(message.from_user.id, f'''Уравнение не является квадратным, так как а = 0''')
 			elif D > 0:
