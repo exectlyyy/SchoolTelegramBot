@@ -3,7 +3,7 @@ s = input()
 names = []
 data = []
 
-while s != '0':
+while s != '0':Австралия
     names.append(s)
     s = input()
 print('вики')

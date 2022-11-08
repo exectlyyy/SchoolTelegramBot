@@ -94,6 +94,27 @@ def int_round(x):
 	else:
 		return x
 
+def numbers_preparing2(x):
+	x = x.replace(',', '.', 1)
+	if x > 0:
+		if x % 1 == 0:
+			return int(x)
+		elif x % 1 != 0:
+			return float()
+		else:
+			bot.send_message(x.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help')
+	else:
+		bot.send_message(x.from_user.id, 'Введите число больше 0')
+
+def numbers_preparing(x):
+	x = x.replace(',', '.', 1)
+	if x % 1 == 0:
+		return int(x)
+	elif x % 1 != 0:
+		return float()
+	else:
+		bot.send_message(x.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help')
+
 '''def replacetodot(x):
 	x = x.replace(',', '.', 1)'''
 	
