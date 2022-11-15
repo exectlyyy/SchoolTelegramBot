@@ -94,29 +94,19 @@ def int_round(x):
 	else:
 		return x
 
-def numbers_preparing2(x):
-	x = x.replace(',', '.', 1)
-	if x > 0:
-		if x % 1 == 0:
-			return int(x)
-		elif x % 1 != 0:
-			return float()
-		else:
-			bot.send_message(x.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help')
-	else:
-		bot.send_message(x.from_user.id, 'Введите число больше 0')
-
-def numbers_preparing(x):
-	x = x.replace(',', '.', 1)
-	if x % 1 == 0:
-		return int(x)
-	elif x % 1 != 0:
-		return float()
-	else:
-		bot.send_message(x.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help')
-
-'''def replacetodot(x):
-	x = x.replace(',', '.', 1)'''
+def DFF(message):
+	answer = ''
+	s = [str(message)[i] for i in range(len(message))]
+	for i in range(len(s)):
+		if s[i] not in '1234567890-,.':
+			return None
+		if s[i] == ',':
+			s[i] = '.'
+		answer += s[i]
+	for i in range(len(answer)):
+		if answer[i] == '.':
+			return float(answer)	
+	return int(answer)
 	
 @bot.message_handler(content_types=['text'])			
 def main(message):
@@ -325,26 +315,48 @@ x = ({str(b)[1:]} + √{D}) / -(2 * {str(a)[1:]}) = {(-(b) + sqrt(D)) / (2 * a)}
 	elif len(local_data) == 4 and local_data[3] == 'q':
 		markup = types.ReplyKeyboardRemove(selective=False)
 		bot.send_message(message.from_user.id, "Введите начальную температуру (°C)", reply_markup=markup)
-		local_data.append(float(message.text.lower()))
+		v1 = DFF(message.text.lower())
+		if v1 != None:
+			if v1 >= 0:
+				local_data.append(v1)
+			else:
+				bot.send_message(message.from_user.id, 'Что-то введено некорректно.')
+		elif v1 == None:
+			bot.send_message(message.from_user.id, 'Что-то введено некорректно.')
 	elif len(local_data) == 5 and local_data[3] == 'q':
 		bot.send_message(message.from_user.id, "Введите конечную  температуру (°C)")
-		local_data.append(float(message.text.lower()))
+		v1 = DFF(message.text.lower())
+		if v1 != None:
+			local_data.append(v1)
+		elif v1 == None:
+			bot.send_message(message.from_user.id, 'Что-то введено некорректно.')
 	elif len(local_data) == 6 and local_data[3] == 'q':
-			bot.send_message(message.from_user.id, "Введите массу (кг)")
-			local_data.append(float(message.text.lower()))	
+		bot.send_message(message.from_user.id, "Введите массу (кг)")
+		v1 = DFF(message.text.lower())
+		if v1 != None:
+			if v1 >= 0:
+				local_data.append(v1)
+			else:
+				bot.send_message(message.from_user.id, 'Что-то введено некорректно.')
+		elif v1 == None:
+			bot.send_message(message.from_user.id, 'Что-то введено некорректно.')
 	elif len(local_data) == 7 and local_data[3] == 'q':
-		local_data.append(float(message.text.lower()))
-		if int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7]) % 1000 == 0:
-			bot.send_message(message.from_user.id, f'''Q = cm(t₂ - t₁)
-Q = {int(local_data[4])} * {int(local_data[7])} * ({int(local_data[6])} - {int(local_data[5])})
+		v1 = DFF(message.text.lower())
+		if v1 != None:
+			local_data.append(v1)
+			if int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7]) % 1000 == 0:
+				bot.send_message(message.from_user.id, f'''Q = cm(t₂ - t₁)
+Q = {local_data[4]} * {local_data[7]} * ({local_data[6]} - {local_data[5]})
 Q = {int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7])} Дж
-Ответом на эту задачу является: {int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7]) // 1000} кДж. (Для перевода в Дж *1000)''')
-		else:
-			bot.send_message(message.from_user.id, f'''Q = cm(t₂ - t₁)
-Q = {int(local_data[4])} * {int(local_data[7])} * ({int(local_data[6])} - {int(local_data[5])})
-Q = {int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7])} Дж
-Ответом на эту задачу является: {int(local_data[4] * (local_data[6] - local_data[5]) * local_data[7])} Дж.''')
-		user_data[message.from_user.id] = []	
+Ответом на эту задачу является: {(local_data[4] * (local_data[6] - local_data[5]) * local_data[7]) // 1000} кДж. (Для перевода в Дж *1000)''')
+			else:
+				bot.send_message(message.from_user.id, f'''Q = cm(t₂ - t₁)
+Q = {local_data[4]} * {local_data[7]} * ({local_data[6]} - {local_data[5]})
+Q = {(local_data[4] * (local_data[6] - local_data[5]) * local_data[7])} Дж
+Ответом на эту задачу является: {local_data[4] * (local_data[6] - local_data[5]) * local_data[7]} Дж.''')
+			user_data[message.from_user.id] = []
+		elif v1 == None:
+			bot.send_message(message.from_user.id, 'Что-то введено некорректно.')	
 	elif len(local_data) == 3 and message.text.lower() == 'c':	
 		markup = types.ReplyKeyboardRemove(selective=False)
 		bot.send_message(message.from_user.id, "Введите количество теплоты (Дж)", reply_markup=markup)
