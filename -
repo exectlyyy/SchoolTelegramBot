@@ -1,0 +1,27 @@
+def PhysTermo2(Q, q, m):
+    if Q == None:
+        return q * m
+    if q == None:
+        return Q / m
+    if m == None:
+        return Q / q
+
+def correct(s):
+    l = s.split()
+    if len(l)!= 3:
+        return None
+    if l[0] == '-':
+        return DFF(DFF(l[1]) * DFF(l[1]))
+    if l[1] == '-':
+        return DFF(DFF(l[0]) / DFF(l[1]))
+    if l[2] == '-':
+        return DFF(DFF(l[0]) / DFF(l[2])) 
+    return 'Что-то введено некорректно'
+
+elif len(local_data) == 3 and local_data[2] == 'термодинамика сгорания':
+    markup = types.ReplyKeyboardRemove(selective=False)																	
+	bot.send_message(message.from_user.id, "Введите по порядку через пробел Q, q, m. Для указания неизвестного используйте -", reply_markup=markup)
+    local_data.append('сгорание')
+elif len(local_data) == 4 and local_data[3] == 'сгорание':
+    bot.send_message(message.from_user.id, correct(message.text.lower()), reply_markup=markup)
+   

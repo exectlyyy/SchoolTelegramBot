@@ -108,18 +108,33 @@ def int_round(x):
 		return x
 
 def DFF(message):
-	answer = ''
-	s = [str(message)[i] for i in range(len(message))]
-	for i in range(len(s)):
-		if s[i] not in '1234567890-,.':
-			return None
-		if s[i] == ',':
-			s[i] = '.'
-		answer += s[i]
-	for i in range(len(answer)):
-		if answer[i] == '.':
-			return float(answer)	
-	return int(answer)
+	if message != '-':
+		answer = ''
+		s = [str(message)[i] for i in range(len(str(message)))]
+		for i in range(len(s)):
+			if s[i] not in '1234567890-,.':
+				return None
+			if s[i] == ',':
+				s[i] = '.'
+			answer += s[i]
+		for i in range(len(answer)):
+			if answer[i] == '.':
+				return float(answer)	
+		return int(answer)
+	return None
+
+def burn(s):
+    l = s.split()
+    print(l)
+    if len(l)!= 3:
+        return None
+    if l[0] == '-':
+        return DFF(DFF(l[1]) * DFF(l[1]))
+    if l[1] == '-':
+        return DFF(DFF(l[0]) / DFF(l[2]))
+    if l[2] == '-':
+        return DFF(DFF(l[0]) / DFF(l[1])) 
+    return 'Что-то введено некорректно'
 
 def URV(message):
 	cf = message.text.split()
@@ -288,14 +303,15 @@ def main(message):
 		markup = types.ReplyKeyboardMarkup()
 		physchapter1 = types.KeyboardButton('Таблица')
 		markup.add(physchapter1)
-		bot.send_message(message.from_user.id, 'Введите задание в формате sin30 | cos60 (таблица - для получения таблицчных значений)', reply_markup=markup)
+		bot.send_message(message.from_user.id, 'Введите задание в формате (название тригонометрической функции)градусы. Например ctg45. (таблица - для получения таблицчных значений)', reply_markup=markup)
 		local_data.append(message.text.lower())
-	elif local_data[2] == 'тригонометрические функции':
+	elif local_data[0] == 'справочные материалы' and local_data[2] == 'тригонометрические функции':
 		if message.text.lower() == 'таблица':
 			bot.send_photo(message.from_user.id, photo='https://ru-static.z-dn.net/files/d3e/e92377a60bc0dea6c8c17a21c126898f.jpg')
 			local_data = []
 		elif sincos(message.text.lower()) != None:
 			bot.send_message(message.from_user.id, sincos(message.text.lower()))
+			local_data = []
 		else:
 			bot.send_message(message.from_user.id, 'Что-то введено некорректно.')
 	elif len(local_data) == 1 and local_data[0] == 'конвертер величин': 													#ВЕТКА СПРАВОЧНЫЕ МАТЕРИАЛЫ
@@ -311,7 +327,8 @@ def main(message):
 		if message.text.lower() == 'физика':
 			markup = types.ReplyKeyboardMarkup()
 			physchapter1 = types.KeyboardButton('Термодинамика')
-			markup.add(physchapter1)
+			physchapter2 = types.KeyboardButton('Термодинамика сгорания')
+			markup.add(physchapter1, physchapter2)
 			bot.send_message(message.from_user.id, "Выберите раздел", reply_markup=markup)
 			local_data.append(message.text.lower())
 		elif message.text.lower() == 'математика':
@@ -355,6 +372,12 @@ def main(message):
 		markup = types.ReplyKeyboardRemove(selective=False)																	
 		bot.send_message(message.from_user.id, "Введите удельную теплоёмкость (Дж/кг * °C)", reply_markup=markup)
 		local_data.append(message.text.lower())
+	elif len(local_data) == 2 and message.text.lower() == 'термодинамика сгорания':
+		markup = types.ReplyKeyboardRemove(selective=False)																	
+		bot.send_message(message.from_user.id, "Введите по порядку через пробел Q, q, m. Для указания неизвестного используйте -", reply_markup=markup)
+		local_data.append('сгорание')
+	elif len(local_data) == 3 and local_data[2] == 'сгорание':
+		bot.send_message(message.from_user.id, burn(message.text.lower()))
 	elif len(local_data) == 4 and local_data[3] == 'q':
 		markup = types.ReplyKeyboardRemove(selective=False)
 		v1 = DFF(message.text.lower())
