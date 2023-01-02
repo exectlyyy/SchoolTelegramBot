@@ -17,7 +17,12 @@ country_data = {'Россия': ['https://upload.wikimedia.org/wikipedia/commons
 				'Объединенные Арабские Эмираты': ['https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_United_Arab_Emirates.svg/160px-Flag_of_the_United_Arab_Emirates.svg.png', 'Объединённые Арабские Эмираты', 'Абу-Даби', '02.12.1971 (независимость)', '10,2 млн. чел.', 'абсолютная монархия', 'Мухаммад ибн Заид Аль Нахайян, президент (на 2022)', 'арабский', 'дирхам ОАЭ (AED)', 'https://ru.wikipedia.org/wiki/Объединённые_Арабские_Эмираты'],
 				'Норвегия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/160px-Flag_of_Norway.svg.png', 'Королевство Норвегия',  'Осло', '15.12.1899', '5,5 млн. чел.', 'конституционная монархия', 'Харальд V, король\n Йонас Гар Стёре. премьер-министр (на 2022)', 'норвежский', 'норвежская крона (NOK)', 'https://ru.wikipedia.org/wiki/Норвегия'],
 				'Испания': ['https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Bandera_de_España.svg/320px-Bandera_de_España.svg.png', 'Королевство Испания', 'Мадрид', '1479', '47,5 млн. чел.', 'конституционная монархия', 'Филипп VI, король', 'испанский', 'евро, EUR', 'https://ru.wikipedia.org/wiki/Испания'],
-				'Португалия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Portugal.svg/320px-Flag_of_Portugal.svg.png', 'Португальская республика', 'Лиссабон', '26.07.1139 основание. 03.12.1643 - незамисимость', '10 млн. чел.', 'президенстко-парламентская республика', 'Марселу Ребелу ди Соза, президент', 'Португальский', 'евро, EUR', 'https://ru.wikipedia.org/wiki/Португалия']}
+				'Португалия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Portugal.svg/320px-Flag_of_Portugal.svg.png', 'Португальская республика', 'Лиссабон', '26.07.1139 основание. 03.12.1643 - незамисимость', '10 млн. чел.', 'президенстко-парламентская республика', 'Марселу Ребелу ди Соза, президент', 'Португальский', 'евро, EUR', 'https://ru.wikipedia.org/wiki/Португалия'],
+				'Финляндия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_Finland.svg/1920px-Flag_of_Finland.svg.png', 'Финляндская Республика', 'Хельсинки', '~1171 основание. 06.12.1917 - незамисимость', '5,5 млн. чел.', 'парламентская республика', 'Саули Ниинистё, президент', 'Финский, шведский', 'евро, EUR', 'https://ru.wikipedia.org/wiki/Финляндия'],
+				'Германия': ['https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/1920px-Flag_of_Germany.svg.png', 'Федеративная Республика Германия', 'Берлин', '~800 основание. 23.05.1949 - незамисимость', '83 млн. чел.', 'федеративная парламентская республика', 'Франк-Вальтер Штайнмайер, президент', 'Немецкий', 'евро, EUR', 'https://ru.wikipedia.org/wiki/Германия'],
+				'Кипр': ['https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Flag_of_Cyprus.svg/1024px-Flag_of_Cyprus.svg.png', 'Республика Кипр', 'Южная Никосия', '~965 основание. 16.08.1960 - незамисимость', '1,2 млн. чел.', 'президентская республика', 'Никос Анастасиадис, президент', 'Греческий', 'евро, EUR', 'https://ru.wikipedia.org/wiki/Республика_Кипр'],
+				'Турецкая Республика Северного Кипра': ['https://upload.wikimedia.org/wikipedia/commons/thumb/1/1e/Flag_of_the_Turkish_Republic_of_Northern_Cyprus.svg/1024px-Flag_of_the_Turkish_Republic_of_Northern_Cyprus.svg.png', 'ТРСК', 'Северная Никосия', '~07.1974 основание. 15.11.1983 - незамисимость', '382 тыс. чел.', 'президентская республика', 'Эрсин Татар, президент', 'Турецкий', 'турецкая лира, TRY', 'https://ru.wikipedia.org/wiki/Турецкая_Республика_Северного_Кипра'],
+				'Дания': ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Flag_of_Denmark.svg/800px-Flag_of_Denmark.svg.png', 'Королевство Дания', 'Копенгаген', '~8 век основание', '5,8 млн. чел.', 'конституционная монархия', 'Маргрете II, королева', 'Датский', 'датская крона, DKK', 'https://ru.wikipedia.org/wiki/Дания']}
 
 @bot.message_handler(commands=['start'])			
 def greetings(message):			#ФУНКЦИЯ СТАРТ	
@@ -52,16 +57,28 @@ def help(message):				#ФУНКЦИЯ ПОМОЩИ
 	
 {message.from_user.first_name}, напиши "решение задач", "конвертер величин" или "справочные материалы"''', reply_markup=markup)
 
-def sincos(x):
-	if x[0:3] == 'sin' and x[3:].isdigit():
-		return sin(radians(int(x[3:])))
-	if x[0:3] == 'cos' and x[3:].isdigit():
-		return cos(radians(int(x[3:])))
-	if x[0:2] == 'tg' and x[2:].isdigit():
-		return tan(radians(int(x[2:])))
-	if x[0:3] == 'ctg' and x[3:].isdigit():
-		return 1 / tan(radians(int(x[3:])))
-	return None
+def Trygonometry(x):
+	if x[-1] != 'r':
+		if x[0:3] == 'sin' and x[3:].isdigit():
+			return sin(radians(int(x[3:])))
+		if x[0:3] == 'cos' and x[3:].isdigit():
+			return cos(radians(int(x[3:])))
+		if x[0:2] == 'tg' and x[2:].isdigit():
+			return tan(radians(int(x[2:])))
+		if x[0:3] == 'ctg' and x[3:].isdigit():
+			return 1 / tan(radians(int(x[3:])))
+		return None
+	else:
+		if x[0:3] == 'sin' and x[3:-1].isdigit():
+			return sin(int(x[3:-1]))
+		if x[0:3] == 'cos' and x[3:-1].isdigit():
+			return cos(int(x[3:-1]))
+		if x[0:2] == 'tg' and x[2:-1].isdigit():
+			return tan(int(x[2:-1]))
+		if x[0:3] == 'ctg' and x[3:-1].isdigit():
+			return 1 / tan(int(x[3:-1]))
+		return None
+		
 @bot.message_handler(commands=['clear'])
 def clear(message):				#ФУНКЦИЯ ОЧИСТКИ
 	global user_data
@@ -92,10 +109,21 @@ def First_message(message, local_data):
 		markup.add(SubjectButton1, SubjectButton2)
 		bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
 		local_data.append(message.text.lower())
-	elif message.text.lower() == 'конвертер величин':
+	elif message.text.lower() == 'конвертер величин':	
 		markup = types.ReplyKeyboardMarkup()    
 		TypeButton1 = types.KeyboardButton('Скорость')
-		markup.add(TypeButton1)
+		TypeButton2 = types.KeyboardButton('Длина')
+		TypeButton3 = types.KeyboardButton('Время')
+		TypeButton4 = types.KeyboardButton('Данные')
+		TypeButton5 = types.KeyboardButton('Масса')
+		TypeButton6 = types.KeyboardButton('Объем')
+		TypeButton7 = types.KeyboardButton('Температура')
+		TypeButton8 = types.KeyboardButton('Энергия')
+		TypeButton9 = types.KeyboardButton('Площадь')
+		TypeButton10 = types.KeyboardButton('Мощность')
+		TypeButton11 = types.KeyboardButton('Давление')
+		TypeButton12 = types.KeyboardButton('Угол')
+		markup.add(TypeButton1, TypeButton2, TypeButton3, TypeButton4, TypeButton5, TypeButton6, TypeButton7, TypeButton8, TypeButton9, TypeButton10, TypeButton11, TypeButton12)
 		bot.send_message(message.from_user.id, "Выберите тип величины", reply_markup=markup)
 		local_data.append(message.text.lower())
 	else:
@@ -124,17 +152,22 @@ def DFF(message):
 	return None
 
 def burn(s):
-    l = s.split()
-    print(l)
-    if len(l)!= 3:
-        return None
-    if l[0] == '-':
-        return DFF(DFF(l[1]) * DFF(l[1]))
-    if l[1] == '-':
-        return DFF(DFF(l[0]) / DFF(l[2]))
-    if l[2] == '-':
-        return DFF(DFF(l[0]) / DFF(l[1])) 
-    return 'Что-то введено некорректно'
+	l = s.split()
+	print(l)
+	if len(l)!= 3:
+		return None
+	if l[0] == '-':
+		a = DFF(DFF(l[1]) * DFF(l[2]))
+		if a % 1000 == 0:
+			return f'Ваш ответ Q = q * m = {DFF(l[1])} * {DFF(l[2])} = {a // 1000} КДж'
+		return f'Ваш ответ Q = q * m = {DFF(l[1])} * {DFF(l[2])} = {a} Дж'
+	if l[1] == '-':
+		a = DFF(DFF(l[0]) / DFF(l[2]))
+		return f'Ваш ответ q = Q / m = {DFF(l[0])} / {DFF(l[2])} = {a} Дж/кг * °C'
+	if l[2] == '-':
+		a = DFF(DFF(l[0]) / DFF(l[1]))
+		return f'Ваш ответ m = Q / q = {DFF(l[0])} / {DFF(l[1])} = {a} кг'
+	return 'Что-то введено некорректно'
 
 def URV(message):
 	cf = message.text.split()
@@ -277,6 +310,7 @@ def geo(message, local_data):
 	
 @bot.message_handler(content_types=['text'])			
 def main(message):
+	list_conv = ['скорость', 'длина', 'время', 'данные', 'масса', 'объем', 'температура', 'энергия', 'площадь', 'мощность', 'давление', 'угол']
 	global user_data			
 	global country_data	
 	global ideas_data	
@@ -303,21 +337,21 @@ def main(message):
 		markup = types.ReplyKeyboardMarkup()
 		physchapter1 = types.KeyboardButton('Таблица')
 		markup.add(physchapter1)
-		bot.send_message(message.from_user.id, 'Введите задание в формате (название тригонометрической функции)градусы. Например ctg45. (таблица - для получения таблицчных значений)', reply_markup=markup)
+		bot.send_message(message.from_user.id, 'Введите задание в формате (название тригонометрической функции)градусы. Если угол дан в радианах, добавь r  в конец без пробелов. Например ctg45. (таблица - для получения таблицчных значений)', reply_markup=markup)
 		local_data.append(message.text.lower())
 	elif local_data[0] == 'справочные материалы' and local_data[2] == 'тригонометрические функции':
 		if message.text.lower() == 'таблица':
 			bot.send_photo(message.from_user.id, photo='https://ru-static.z-dn.net/files/d3e/e92377a60bc0dea6c8c17a21c126898f.jpg')
 			local_data = []
-		elif sincos(message.text.lower()) != None:
-			bot.send_message(message.from_user.id, sincos(message.text.lower()))
+		elif Trygonometry(message.text.lower()) != None:
+			bot.send_message(message.from_user.id, Trygonometry(message.text.lower()))
 			local_data = []
 		else:
 			bot.send_message(message.from_user.id, 'Что-то введено некорректно.')
 	elif len(local_data) == 1 and local_data[0] == 'конвертер величин': 													#ВЕТКА СПРАВОЧНЫЕ МАТЕРИАЛЫ
 		local_data.append(message.text.lower())
 		markup = types.ReplyKeyboardRemove(selective=False)
-		if local_data[1] == 'скорость':
+		if local_data[1] in list_conv:
 			bot.send_message(message.from_user.id, 'Введи числовое значение величины', reply_markup=markup)
 		else:
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help', reply_markup=markup)
@@ -561,6 +595,188 @@ m = {float(local_data[4]) / (float(local_data[5]) * ((float(local_data[7]) - flo
 м/с - {speed * 60}
 м/мин - {speed}
 ''')
+		user_data[message.from_user.id] = []
+	elif len(local_data) == 2 and local_data[1] == 'время':
+		local_data.append(float(message.text))
+		markup = types.ReplyKeyboardMarkup()
+		Speed1 = types.KeyboardButton('с')
+		Speed2 = types.KeyboardButton('мин')
+		Speed3 = types.KeyboardButton('часы')
+		markup.add(Speed1, Speed2, Speed3)
+		bot.send_message(message.from_user.id, 'Выберите вашу величину', reply_markup=markup)
+	elif len(local_data) == 3 and message.text.lower() == 'с':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''с - {speed}
+мин - {speed / 60}
+часы - {speed / 3600}
+''')
+		user_data[message.from_user.id] = []	
+	elif len(local_data) == 3 and message.text.lower() == 'мин':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''с - {speed * 60}
+мин - {speed}
+часы - {speed / 60}
+''')
+		user_data[message.from_user.id] = []	
+	elif len(local_data) == 3 and message.text.lower() == 'часы':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''с - {speed * 3600}
+мин - {speed * 60}
+часы - {speed}
+''')
+		user_data[message.from_user.id] = []	
+	elif len(local_data) == 2 and local_data[1] == 'длина':
+		local_data.append(float(message.text))
+		markup = types.ReplyKeyboardMarkup()
+		Speed1 = types.KeyboardButton('м')
+		Speed2 = types.KeyboardButton('км')
+		Speed3 = types.KeyboardButton('мили')
+		markup.add(Speed1, Speed2, Speed3)
+		bot.send_message(message.from_user.id, 'Выберите вашу величину', reply_markup=markup)
+	elif len(local_data) == 3 and message.text.lower() == 'м':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''м - {speed}
+		км - {speed / 1000}
+		мили - {speed / 1610}
+		''')
+		user_data[message.from_user.id] = []  
+	elif len(local_data) == 3 and message.text.lower() == 'км':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''м - {speed * 1000}
+		км - {speed}
+		мили - {speed / 1.61}
+		''')
+		user_data[message.from_user.id] = []  
+	elif len(local_data) == 3 and message.text.lower() == 'мили':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f''' м - {speed * 1610}
+		км - {speed * 1.61}
+		мили - {speed}
+		''')
+		user_data[message.from_user.id] = []
+	elif len(local_data) == 2 and local_data[1] == 'данные':
+		local_data.append(float(message.text))
+		markup = types.ReplyKeyboardMarkup()
+		Speed1 = types.KeyboardButton('биты')
+		Speed2 = types.KeyboardButton('байты')
+		Speed3 = types.KeyboardButton('Кб')
+		Speed4 = types.KeyboardButton('Мб')
+		Speed5 = types.KeyboardButton('Гб')
+		markup.add(Speed1, Speed2, Speed3, Speed4, Speed5)
+		bot.send_message(message.from_user.id, 'Выберите вашу величину', reply_markup=markup)
+	elif len(local_data) == 3 and message.text.lower() == 'биты':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''биты - {speed}
+		байты - {speed / 8}
+		Кб - {speed / 8 / 1024}
+		Мб - {speed / 8 / 1024 / 1024}
+		гб - {speed / 8 /1024 / 1024 / 1024}
+		''')
+		user_data[message.from_user.id] = []  
+	elif len(local_data) == 3 and message.text.lower() == 'байты':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''биты - {speed * 8}
+		байты - {speed}
+		Кб - {speed / 1024}
+		Мб - {speed / 1024 / 1024}
+		гб - {speed / 1024 / 1024 / 1024}
+		''')
+		user_data[message.from_user.id] = []  	
+	elif len(local_data) == 3 and message.text.lower() == 'кб':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''биты - {speed * 8 * 1024}
+		байты - {speed * 1024}
+		Кб - {speed}
+		Мб - {speed / 1024}
+		гб - {speed / 1024 / 1024}
+		''')
+		user_data[message.from_user.id] = []  	
+	elif len(local_data) == 3 and message.text.lower() == 'мб':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''биты - {speed * 8 * 1024 * 1024}
+		байты - {speed * 1024 * 1024}
+		Кб - {speed * 1024}
+		Мб - {speed}
+		гб - {speed / 1024}
+		''')
+		user_data[message.from_user.id] = []  	
+	elif len(local_data) == 3 and message.text.lower() == 'гб':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''биты - {speed * 1024 * 1024 * 1024 * 8}
+		байты - {speed * 1024 * 1024 * 1024}
+		Кб - {speed * 1024 * 1024}
+		Мб - {speed * 1024}
+		гб - {speed}
+		''')
+	elif len(local_data) == 2 and local_data[1] == 'масса':
+		local_data.append(float(message.text))
+		markup = types.ReplyKeyboardMarkup()
+		Speed1 = types.KeyboardButton('мг')
+		Speed2 = types.KeyboardButton('г')
+		Speed3 = types.KeyboardButton('кг')
+		Speed4 = types.KeyboardButton('фунт')
+		markup.add(Speed1, Speed2, Speed3, Speed4)
+		bot.send_message(message.from_user.id, 'Выберите вашу величину', reply_markup=markup)
+	elif len(local_data) == 3 and message.text.lower() == 'мг':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''мг - {speed}
+г - {speed / 1000}
+кг - {speed / 1000000}
+фунт - {speed / 453592,37}
+''')
+		user_data[message.from_user.id] = []	
+	elif len(local_data) == 3 and message.text.lower() == 'г':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''мг - {speed * 1000}
+г - {speed}
+кг - {speed/1000}
+фунт - {speed * 453,59237}
+''')
+		user_data[message.from_user.id] = []	
+	elif len(local_data) == 3 and message.text.lower() == 'кг':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''мг - {speed * 1000000}
+г - {speed * 1000}
+кг - {speed}
+фунт - {speed / 0.4536}
+''')
+		user_data[message.from_user.id] = []	
+	elif len(local_data) == 3 and message.text.lower() == 'фунт':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''мг - {speed * 453600}
+г - {speed * 453.6}
+кг - {speed * 0,4536}
+фунт - {speed}
+''')
+		user_data[message.from_user.id] = []	
+	elif len(local_data) == 2 and local_data[1] == 'температура':
+		local_data.append(float(message.text))
+		markup = types.ReplyKeyboardMarkup()
+		Speed1 = types.KeyboardButton('°C')
+		Speed2 = types.KeyboardButton('K')
+		Speed3 = types.KeyboardButton('°F')
+		markup.add(Speed1, Speed2, Speed3)
+		bot.send_message(message.from_user.id, 'Выберите вашу величину', reply_markup=markup)
+	elif len(local_data) == 3 and message.text.lower() == '°c':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''°C - {speed}
+		K - {speed + 273}
+		°F - {speed * 1.8 + 32}
+		''')
+		user_data[message.from_user.id] = []  
+	elif len(local_data) == 3 and message.text.lower() == 'k':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''°C - {speed - 273}
+		K - {speed}
+		°F - {speed * 1.8 - 459}
+		''')
+		user_data[message.from_user.id] = []  
+	elif len(local_data) == 3 and message.text.lower() == '°f':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''°C - {(speed - 32) / 1.8}
+		K - {(speed + 459) / 1.8}
+		°F - {speed}
+		''')
 		user_data[message.from_user.id] = []
 	print(user_data)      
 	print(ideas_data)                                                                                                                             
