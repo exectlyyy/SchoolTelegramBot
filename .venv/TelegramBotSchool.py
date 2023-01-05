@@ -47,7 +47,7 @@ def help(message):				#ФУНКЦИЯ ПОМОЩИ
 	user_data[message.from_user.id] = []
 	markup = types.ReplyKeyboardMarkup() 
 	clear_markup1 = types.KeyboardButton('Решение задач') 
-	clear_markup2 = types.KeyboardButton('Справочные материалы') 
+	clear_markup2 = types.KeyboardButton('Разное') 
 	clear_markup3 = types.KeyboardButton('Конвертер величин') 
 	markup.add(clear_markup1, clear_markup2, clear_markup3)
 	bot.send_message(message.from_user.id, f'''Список команд:
@@ -85,7 +85,7 @@ def clear(message):				#ФУНКЦИЯ ОЧИСТКИ
 	user_data[message.from_user.id] = []
 	markup = types.ReplyKeyboardMarkup() 
 	clear_markup1 = types.KeyboardButton('Решение задач') 
-	clear_markup2 = types.KeyboardButton('Справочные материалы') 
+	clear_markup2 = types.KeyboardButton('Разное') 
 	clear_markup3 = types.KeyboardButton('Конвертер величин') 
 	markup.add(clear_markup1, clear_markup2, clear_markup3)
 	bot.send_message(message.from_user.id, 'История очищена!', reply_markup=markup)
@@ -102,11 +102,12 @@ def First_message(message, local_data):
 		markup.add(SubjectButton1, SubjectButton2)
 		bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
 		local_data.append(message.text.lower())
-	elif message.text.lower() == 'справочные материалы':
+	elif message.text.lower() == 'разное':
 		markup = types.ReplyKeyboardMarkup()    
 		SubjectButton1 = types.KeyboardButton('География')
 		SubjectButton2 = types.KeyboardButton('Математика')
-		markup.add(SubjectButton1, SubjectButton2)
+		SubjectButton3 = types.KeyboardButton('Перевод систем счисления')
+		markup.add(SubjectButton1, SubjectButton2, SubjectButton3)
 		bot.send_message(message.from_user.id, "Выберите предмет", reply_markup=markup)
 		local_data.append(message.text.lower())
 	elif message.text.lower() == 'конвертер величин':	
@@ -307,7 +308,27 @@ def geo(message, local_data):
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, видимо в нашей базе ещё нет этой страны. Мы получили данные от вашего запроса и страна будет добавлена в ближайшее время. Нажмите /clear для выхода или наберите другое название', reply_markup=markup)
 			print(message.text)
 
-	
+def pss(message):
+	num10 = 0
+	l = message.text.split()
+	if len(l) == 3:
+		if int(l[1]) > 0 and int(l[2]) > 0 and int(l[1]) < 11 and int(l[2]) < 11:
+			num = int(l[0])
+			o1 = int(l[1])
+			o2 = int(l[2])
+			res = 0
+			strnum = str(num)[::-1]
+			s = ''
+			for i in range(len(strnum)):
+				num10 += int(strnum[i]) * (o1 ** i)
+			while num10!=0:
+				s += str(num10 % o2)
+				num10 //= o2
+			bot.send_message(message.from_user.id, s[::-1])
+			
+			
+
+
 @bot.message_handler(content_types=['text'])			
 def main(message):
 	list_conv = ['скорость', 'длина', 'время', 'данные', 'масса', 'объем', 'температура', 'энергия', 'площадь', 'мощность', 'давление', 'угол']
@@ -321,7 +342,7 @@ def main(message):
 	local_data = user_data[message.from_user.id]
 	if len(local_data) == 0:
 		First_message(message, local_data)
-	elif len(local_data) == 1 and local_data[0] == 'справочные материалы': 													#ВЕТКА СПРАВОЧНЫЕ МАТЕРИАЛЫ
+	elif len(local_data) == 1 and local_data[0] == 'разное': 													#ВЕТКА СПРАВОЧНЫЕ МАТЕРИАЛЫ
 		local_data.append(message.text.lower())
 		markup = types.ReplyKeyboardRemove(selective=False)
 		if local_data[1] == 'география':
@@ -331,15 +352,17 @@ def main(message):
 			physchapter1 = types.KeyboardButton('Тригонометрические функции')
 			markup.add(physchapter1)
 			bot.send_message(message.from_user.id, 'Выбери тему:', reply_markup=markup)
+		elif local_data[1] == 'перевод систем счисления':
+			bot.send_message(message.from_user.id, 'Введите данные в формате "*число для перевода* *система счисления вашего числа* *нужная система счисления*" (Основание системы счисления не может быть отрицательным и больше 10, в дальнейшем будет 16-ричная система.)', reply_markup=markup)
 		else:
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help', reply_markup=markup)
-	elif len(local_data) == 2 and local_data[0] == 'справочные материалы' and message.text.lower() == 'тригонометрические функции':
+	elif len(local_data) == 2 and local_data[0] == 'разное' and message.text.lower() == 'тригонометрические функции':
 		markup = types.ReplyKeyboardMarkup()
 		physchapter1 = types.KeyboardButton('Таблица')
 		markup.add(physchapter1)
 		bot.send_message(message.from_user.id, 'Введите задание в формате (название тригонометрической функции)градусы. Если угол дан в радианах, добавь r  в конец без пробелов. Например ctg45. (таблица - для получения таблицчных значений)', reply_markup=markup)
 		local_data.append(message.text.lower())
-	elif local_data[0] == 'справочные материалы' and local_data[2] == 'тригонометрические функции':
+	elif len(local_data) == 3 and local_data[0] == 'разное' and local_data[2] == 'тригонометрические функции':
 		if message.text.lower() == 'таблица':
 			bot.send_photo(message.from_user.id, photo='https://ru-static.z-dn.net/files/d3e/e92377a60bc0dea6c8c17a21c126898f.jpg')
 			local_data = []
@@ -355,8 +378,10 @@ def main(message):
 			bot.send_message(message.from_user.id, 'Введи числовое значение величины', reply_markup=markup)
 		else:
 			bot.send_message(message.from_user.id, 'Прости, я тебя не понимаю, для помощи напиши команду  /help', reply_markup=markup)
-	elif len(local_data) == 2 and local_data[0] == 'справочные материалы' and local_data[1] == 'география':						#ВЫВОДИТ СПРАВКУ О СТРАНАХ			markup = types.ReplyKeyboardRemove(selective=False)
+	elif len(local_data) == 2 and local_data[0] == 'разное' and local_data[1] == 'география':						#ВЫВОДИТ СПРАВКУ О СТРАНАХ			markup = types.ReplyKeyboardRemove(selective=False)
 		geo(message, local_data)
+	elif len(local_data) == 2 and local_data[0] == 'разное' and local_data[1] == 'перевод систем счисления':
+		pss(message)
 	elif len(local_data) == 1 and local_data[0] == 'решение задач':														#ВЕТКА РЕШЕНИЕ ЗАДАЧ
 		if message.text.lower() == 'физика':
 			markup = types.ReplyKeyboardMarkup()
@@ -836,6 +861,54 @@ m = {float(local_data[4]) / (float(local_data[5]) * ((float(local_data[7]) - flo
 		км³ - {speed}
 		''')
 		user_data[message.from_user.id] = []
+	elif len(local_data) == 2 and local_data[1] == 'энергия':
+		local_data.append(float(message.text))
+		markup = types.ReplyKeyboardMarkup()
+		Speed1 = types.KeyboardButton('Дж')
+		Speed2 = types.KeyboardButton('кДж')
+		Speed3 = types.KeyboardButton('калории')
+		markup.add(Speed1, Speed2, Speed3)
+		bot.send_message(message.from_user.id, 'Выберите вашу величину', reply_markup=markup)
+	elif len(local_data) == 3 and message.text.lower() == 'дж':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''дж - {speed}
+		кДж - {speed / 1000}
+		калории - {speed / 4.18}
+		''')
+		user_data[message.from_user.id] = []  
+	elif len(local_data) == 3 and message.text.lower() == 'кдж':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''дж - {speed * 1000}
+		кДж - {speed}
+		калории - {speed / 4.18 * 1000}
+		''')
+		user_data[message.from_user.id] = []  
+	elif len(local_data) == 3 and message.text.lower() == 'калории':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''дж - {speed * 4.18}
+		кДж - {speed * 4.18 / 1000}
+		калории - {speed}
+		''')
+		user_data[message.from_user.id] = []  
+	elif len(local_data) == 2 and local_data[1] == 'мощность':
+		local_data.append(float(message.text))
+		markup = types.ReplyKeyboardMarkup()
+		Speed1 = types.KeyboardButton('Вт')
+		Speed2 = types.KeyboardButton('кВт')
+		markup.add(Speed1, Speed2)
+		bot.send_message(message.from_user.id, 'Выберите вашу величину', reply_markup=markup)
+	elif len(local_data) == 3 and message.text.lower() == 'вт':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''Вт - {speed}
+		кВт - {speed / 1000}
+		''')
+		user_data[message.from_user.id] = []  
+	elif len(local_data) == 3 and message.text.lower() == 'квт':
+		speed = round(float(local_data[2]), 3)
+		bot.send_message(message.from_user.id, f'''Вт - {speed * 1000}
+		кВт - {speed}
+		''')
+		user_data[message.from_user.id] = [] 
 	print(user_data)      
 	print(ideas_data)                                                                                                                             
 bot.infinity_polling(timeout=1080)
