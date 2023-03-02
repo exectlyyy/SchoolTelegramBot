@@ -25,7 +25,7 @@ country_data = {'Россия': ['https://upload.wikimedia.org/wikipedia/commons
 				'Дания': ['https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Flag_of_Denmark.svg/800px-Flag_of_Denmark.svg.png', 'Королевство Дания', 'Копенгаген', '~8 век основание', '5,8 млн. чел.', 'конституционная монархия', 'Маргрете II, королева', 'Датский', 'датская крона, DKK', 'https://ru.wikipedia.org/wiki/Дания']}
 
 @bot.message_handler(commands=['start'])			
-def greetings(message):			#ФУНКЦИЯ СТАРТ	
+def greetings(message):	
 	markup = types.ReplyKeyboardMarkup()    
 	HelpMarkup = types.KeyboardButton('/help')  
 	markup.add(HelpMarkup)
@@ -42,7 +42,7 @@ def cat(message):				#ФУНКЦИЯ С КОТАМИ
 	bot.send_photo(message.from_user.id, photo = choice(list_cats))
 
 @bot.message_handler(commands=['help'])
-def help(message):				#ФУНКЦИЯ ПОМОЩИ
+def help(message):		
 	global user_data
 	user_data[message.from_user.id] = []
 	markup = types.ReplyKeyboardMarkup() 
